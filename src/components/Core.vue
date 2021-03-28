@@ -5,39 +5,32 @@
       A place where you can stake your favourite farm asset!
     </p>
     <UserInfo/>
-    <h3>My Farm</h3>
-
 
 <div>
-      <b-nav card-header pills align="center">
-        <b-nav-item active>Active</b-nav-item>
-        <b-nav-item>Inactive</b-nav-item>
-        <b-nav-item disabled>Disabled</b-nav-item>
-      </b-nav>
-      <b-card-text>
-        With supporting text below as a natural lead-in to additional content.
-      </b-card-text>
-      <b-button variant="primary">Go somewhere</b-button>
+
 </div>
-
-
-    <div >
-      <b-tabs content-class="mt-3"  align="center">
-        <b-tab title="My Free Assets" active><MyAssets/></b-tab>
-        <b-tab title="My Pool"><MyPool/></b-tab>
-        <b-tab title="Store" ><MyStore/></b-tab>
-      </b-tabs>
-    </div>
-    
-    
+<div>
+  <b-jumbotron header="My Farm" lead="Select an options">
+    <b-container>
+      <b-nav card-header pills align="center">
+        <b-nav-item exact-active-class="active" to="/MyAssets">MyAssets</b-nav-item>
+        <b-nav-item exact-active-class="active" to="/MyPool">MyPool</b-nav-item>
+        <b-nav-item exact-active-class="active" to="/MyStore">MyStore</b-nav-item>
+      </b-nav>
+      </b-container>
+      </b-jumbotron>
+</div>
+    <router-view/>  
   </div>
 </template>
 <script>
+
 import UserInfo from './UserInfo.vue'
+/*
 import MyAssets from './MyAssets.vue'
 import MyPool from './MyPool.vue'
 import MyStore from './MyStore.vue'
-
+*/
 
 import ContractsServices from '../services/ContractsServices.js'
 const contractsServices = new ContractsServices();
@@ -45,10 +38,7 @@ const contractsServices = new ContractsServices();
 export default {
   name: 'Core',
   components: {
-    UserInfo,
-    MyAssets,
-    MyPool,
-    MyStore
+    UserInfo
   },
   props: {
     msg: String

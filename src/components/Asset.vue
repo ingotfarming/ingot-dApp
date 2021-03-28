@@ -1,12 +1,12 @@
 <template>
-
-
-              <div class="card mb-4 box-shadow">   
-                <img class="card-img-top" v-bind:src='require("@/assets/NFT/"+this.id+".jpg")' data-holder-rendered="true">
-                <div class="card-body">
-                  <h3 class="card-title">{{name}}</h3>
-                  <p class="card-text">{{text}}</p>
-                  
+    <b-card v-bind:title=name v-bind:img-src='require("@/assets/NFT/"+this.id+".jpg")' img-alt="Image" img-top>
+      <b-card-text>{{text}}</b-card-text>
+          <h5 class="d-flex justify-content-between align-items-center mb-3" >
+            <span class="text-muted" >Power</span>
+            <b-badge pill variant="warning">{{power}}</b-badge>
+          </h5>
+          
+                
                   <!-- MY_ASSETS-->
                   <div v-if="casing.type === 'MY_ASSETS'">
                     <h5 class="d-flex justify-content-between align-items-center mb-3">
@@ -35,10 +35,7 @@
                    </div>
 
 
-                </div>
-              </div>
-
-
+    </b-card>
 </template>
 
 <script>
@@ -55,6 +52,7 @@ export default {
       id: this.asset.id,
       name : contractsServices.getNFTMetaData()[this.asset.id].name,
       text : contractsServices.getNFTMetaData()[this.asset.id].text,
+      power: contractsServices.getNFTMetaData()[this.asset.id].power,
       
       numberAsset: this.asset.number,
       

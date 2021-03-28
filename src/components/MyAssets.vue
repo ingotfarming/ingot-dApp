@@ -1,21 +1,20 @@
 <template>
 <div>
-      <b-row>
-      <b-col lg="4" class="pb-2"/>
-      <b-col lg="2" class="pb-2"><b-button pill variant="primary" @click="chooseButton()">Choose</b-button></b-col>
-      <b-col lg="2" class="pb-2" v-if="this.casing.buttonChoose"><b-button pill variant="danger" @click="transferAsset()">Transfer</b-button></b-col>
-      <b-col lg="4" class="pb-2"/>
-      </b-row>
+      
+      <b-container>
+      <p><b-button pill variant="primary" @click="chooseButton()">Choose</b-button>
+      <b-button v-if="this.casing.buttonChoose" pill variant="danger" @click="transferAsset()">Transfer</b-button></p>
+      </b-container>
 
-  <div class="album py-5 bg-light">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-4" :key="asset.id" v-for="asset in assets">
+        <b-container>
+              <b-row>
+              <b-card-group deck>
+                <div class="col-md-4" :key="asset.id" v-for="asset in assets">
                 <Asset :asset="asset" :casing="casing" @nAssetToPool="buildNumberAssetToPool"/>
-            </div>    
-          </div>
-        </div>
-  </div>
+            </div>   
+              </b-card-group>
+            </b-row>
+    </b-container>
 </div>
 </template>
 <script>
