@@ -1,21 +1,23 @@
 <template>
 <div>
-      <b-row>
-      <b-col lg="4" class="pb-2"/>
-      <b-col lg="2" class="pb-2"><b-button pill variant="primary" @click="chooseButton()">Choose</b-button></b-col>
-      <b-col lg="2" class="pb-2"><b-button pill variant="danger" v-if="this.casing.buttonChoose" @click="transferAssetToUser()">Transfer</b-button></b-col>
-      <b-col lg="4" class="pb-2"/>
-      </b-row>
+    <b-jumbotron header="My Farm" lead="Select an options" fluid=false>
+      <hr class="my-4">
+        <p>Select Assets to transfer</p>
+          <b-button-group size="lg">
+            <b-button @click="chooseButton()">Choose Assets</b-button>
+            <b-button :disabled="!this.casing.buttonChoose" variant="danger"  @click="transferAssetToUser()">Transfer Assets</b-button>
+          </b-button-group>
+      </b-jumbotron>
 
-<div class="album py-5 bg-light">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-4" :key="asset.id" v-for="asset in assets">
-                <Asset :asset="asset" :casing="casing" @nAssetToUser="buildNumberAssetToUser"/>
-            </div>    
-          </div>
-        </div>
-  </div>
+        <b-container >
+              <b-row>
+              <b-card-group deck>
+                <div class="col-md-4" :key="asset.id" v-for="asset in assets">
+                <Asset :asset="asset" :casing="casing" @nAssetToPool="buildNumberAssetToPool"/>
+            </div>   
+              </b-card-group>
+            </b-row>
+    </b-container>
 </div>
 </template>
 <script>

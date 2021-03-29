@@ -1,12 +1,15 @@
 <template>
 <div>
-      
-      <b-container>
-      <p><b-button pill variant="primary" @click="chooseButton()">Choose</b-button>
-      <b-button v-if="this.casing.buttonChoose" pill variant="danger" @click="transferAsset()">Transfer</b-button></p>
-      </b-container>
+    <b-jumbotron header="My Farm" lead="Select an options" fluid=false>
+      <hr class="my-4">
+        <p>Select Assets to transfer</p>
+          <b-button-group size="lg">
+            <b-button @click="chooseButton()">Choose Assets</b-button>
+            <b-button :disabled="!this.casing.buttonChoose" variant="danger"  @click="transferAsset()">Transfer Assets</b-button>
+          </b-button-group>
+      </b-jumbotron>
 
-        <b-container>
+        <b-container >
               <b-row>
               <b-card-group deck>
                 <div class="col-md-4" :key="asset.id" v-for="asset in assets">

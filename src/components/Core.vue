@@ -1,25 +1,6 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      A place where you can stake your favourite farm asset!
-    </p>
+  <div>
     <UserInfo/>
-
-<div>
-
-</div>
-<div>
-  <b-jumbotron header="My Farm" lead="Select an options">
-    <b-container>
-      <b-nav card-header pills align="center">
-        <b-nav-item exact-active-class="active" to="/MyAssets">MyAssets</b-nav-item>
-        <b-nav-item exact-active-class="active" to="/MyPool">MyPool</b-nav-item>
-        <b-nav-item exact-active-class="active" to="/MyStore">MyStore</b-nav-item>
-      </b-nav>
-      </b-container>
-      </b-jumbotron>
-</div>
     <router-view/>  
   </div>
 </template>
