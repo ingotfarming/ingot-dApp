@@ -1,17 +1,20 @@
-import { FAMToken, FAMAsset, Pool, NFT } from '../assets'
+import { FAMToken, FAMAsset, Pool, Store, NFT } from '../assets'
 
 //import Web3 from './web3'
 import moment from 'moment'
 
 import Web3 from 'web3';
+import { BN } from "web3-utils";
+
 //let web3 = new Web3(new Web3.providers.HttpProvider(“http://localhost:9545"))
 const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
 
-const FAM_TOKEN_ADDRESS = "0xBDF0c491877efb66c9D981EBb1004E91B9Cc62eC";
-const FAM_ASSET_ADDRESS=  "0x244c2CAF715AFDd3E90dD0460f02639ac6670d50";
-const POOL_ADDRESS=  "0x24B8EcF7BA7346ad33610A422f62B97B9dCc8164";
+const FAM_TOKEN_ADDRESS = "0x79E5Da24447A006A95b33b8AB39C6FD623ce31dE";
+const FAM_ASSET_ADDRESS=  "0x10622F09fa6ed1dEc50cd3727B1F97731Db66aAD";
+const POOL_ADDRESS=  "0xe033aC4286a49B0c5d8826749D2a66322DFa3106";
+const STORE_ADDRESS = "0xa91c80cDd1472Abc5fCEb47F6cE103028b0F319A";
 
-const NUM_ASSET_TYPES =NFT.length;
+const NUM_ASSET_TYPES = NFT.length;
 
 
 class ContractsServices {
@@ -19,8 +22,14 @@ class ContractsServices {
         this.famTokenContract = new web3.eth.Contract(FAMToken.abi, FAM_TOKEN_ADDRESS);
         this.famAssetContract = new web3.eth.Contract(FAMAsset.abi, FAM_ASSET_ADDRESS);
         this.poolContract = new web3.eth.Contract(Pool.abi, POOL_ADDRESS);
+        this.storeContract = new web3.eth.Contract(Store.abi, STORE_ADDRESS);
+
       }
     getNFTMetaData = function() {return NFT}
+    getAllPowerOfAssets = function(){
+        return NFT;
+    }
+
     getBalanceOfFamToken = async function() {
         var balanceWei = 0;
         try {
@@ -32,6 +41,11 @@ class ContractsServices {
             console.log(e);
         }
         return balanceWei;
+    }
+
+    getBalanceETH = async function () {
+        const accounts = await web3.eth.getAccounts()
+        return web3.utils.fromWei(await web3.eth.getBalance(accounts[0]));
     }
     // FAM Asset
     getBalanceOfFamAsset = async function() {
@@ -109,7 +123,7 @@ class ContractsServices {
         //stimateReward(address addr) public view returns(uint256){
         const accounts = await web3.eth.getAccounts()
         console.log("claimFromPool ", accounts[0] )
-        var response = await this.poolContract.methods.claim().send({from: accounts[0]})
+        var response = await this.poolContract.methods.claim().send({from: accounts[0], gas:3000000})
         console.log(response)
         return response;
     }
@@ -123,8 +137,32 @@ class ContractsServices {
         return response;
     }
 
+    getPriceFromStore = async function(){
+        var response = []
+        const accounts = await web3.eth.getAccounts()
+        for(let i; i<NUM_ASSET_TYPES;i++){
+            var price = this.storeContract.methods.priceNft(NFT[i].id).call({from: accounts[0]})
+            response.push({id: NFT[i].id, price: price})
+        }
+        return response   
+    }
 
-    
+    approveTransferToStore  = async function(amount){  
+        const accounts = await web3.eth.getAccounts()
+        let amountWei = web3.utils.toWei(new BN(amount));
+        await this.famTokenContract.methods.approve(STORE_ADDRESS,amountWei).send({from: accounts[0], gas:3000000})
+
+    } 
+    buyBatchFromStore  = async function(ids, amounts){  
+        const accounts = await web3.eth.getAccounts()
+        console.log(ids,amounts)
+        await this.storeContract.methods.buyBatchNft(ids, amounts).send({from: accounts[0], gas:3000000})
+    }
+    buyTokens = async function(etherAmount){
+        const accounts = await web3.eth.getAccounts()
+        let amountsWei = web3.utils.toWei(etherAmount)
+        await this.storeContract.methods.buyTokens(amountsWei).send({from: accounts[0], gas:3000000})
+    }
 
     createContract = async function () {
         const web3 = await Web3()        

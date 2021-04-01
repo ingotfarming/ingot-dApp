@@ -5,34 +5,41 @@
             <span class="text-muted" >Power</span>
             <b-badge pill variant="warning">{{power}}</b-badge>
           </h5>
+           
+           <div v-if="casing.type === 'MY_ASSETS' ||casing.type === 'MY_POOL' ">
+           <h5 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-muted">Your Asset</span>
+            <span class="badge badge-secondary badge-pill">{{numberAsset}}</span>
+          </h5>
+          </div>
           
                 
                   <!-- MY_ASSETS-->
-                  <div v-if="casing.type === 'MY_ASSETS'">
-                    <h5 class="d-flex justify-content-between align-items-center mb-3">
-                      <span class="text-muted">Your Asset</span>
-                      <span class="badge badge-secondary badge-pill">{{numberAsset}}</span>
-                    </h5>
                    <div v-if="casing.type === 'MY_ASSETS' && casing.buttonChoose===true">
                     <h5 class="d-flex justify-content-between align-items-center mb-3">
                       <span class="text-muted">Transfer to Pool</span>
-                      <b-form-spinbutton id="sb-inline" v-model="numberAssetToPool" inline min="0" max="100" @input="$emit('nAssetToPool', id, numberAssetToPool)"></b-form-spinbutton>
+                      <b-form-spinbutton id="sb-inline" v-model="numberAssetSelected" inline min="0" max="100" @input="$emit('nAssetToTransfer', id, numberAssetSelected, price)"></b-form-spinbutton>
                     </h5>
                   </div>
-                   </div>
                    <!-- MY_POOL-->
-                     <div v-if="casing.type === 'MY_POOL'">
-                    <h5 class="d-flex justify-content-between align-items-center mb-3">
-                      <span class="text-muted">Your Asset</span>
-                      <span class="badge badge-secondary badge-pill">{{numberAsset}}</span>
-                    </h5>
                    <div v-if="casing.type === 'MY_POOL' && casing.buttonChoose===true">
                     <h5 class="d-flex justify-content-between align-items-center mb-3">
                       <span class="text-muted">Transfer to Pool</span>
-                      <b-form-spinbutton id="sb-inline" v-model="numberAssetToUser" inline min="0" max="100" @input="$emit('nAssetToUser', id, numberAssetToUser)"></b-form-spinbutton>
+                      <b-form-spinbutton id="sb-inline" v-model="numberAssetSelected" inline min="0" max="100" @input="$emit('nAssetToTransfer', id, numberAssetSelected, price)"></b-form-spinbutton>
                     </h5>
                   </div>
-                   </div>
+
+                   <!-- STORE-->
+                   <div v-if="casing.type === 'STORE'">
+                    <h5 class="d-flex justify-content-between align-items-center mb-3">
+                      <span class="text-muted">Price</span>
+                      <span class="badge badge-secondary badge-pill">{{price}}</span>
+                  </h5>
+                    <h5 class="d-flex justify-content-between align-items-center mb-3">
+                      <span class="text-muted">Transfer to Pool</span>
+                      <b-form-spinbutton id="sb-inline" v-model="numberAssetSelected" inline min="0" max="100" @input="$emit('nAssetToTransfer', id, numberAssetSelected, price)"></b-form-spinbutton>
+                    </h5>
+                  </div>
 
 
     </b-card>
@@ -50,15 +57,13 @@ export default {
   data: function() {
     return {
       id: this.asset.id,
+      numberAsset: this.asset.number,
       name : contractsServices.getNFTMetaData()[this.asset.id].name,
       text : contractsServices.getNFTMetaData()[this.asset.id].text,
       power: contractsServices.getNFTMetaData()[this.asset.id].power,
+      price: contractsServices.getNFTMetaData()[this.asset.id].price,
       
-      numberAsset: this.asset.number,
-      
-      numberAssetToPool:0,
-
-      numberAssetToUser: 0
+      numberAssetSelected:0,
 
     }
   },
@@ -67,10 +72,6 @@ export default {
   created: function(){
   },
   methods: {
-    nAssetToPool: function(value){
-      console.log(value)
-        
-    }
   }
 }
 </script>

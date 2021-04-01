@@ -1,6 +1,6 @@
 <template>
 <div>
-    <b-jumbotron header="My Farm" lead="Select an options" fluid=false>
+    <b-jumbotron :header="header" :lead="lead" fluid=false class="py-4">
       <hr class="my-4">
         <p>Select Assets to transfer</p>
           <b-button-group size="lg">
@@ -9,11 +9,11 @@
           </b-button-group>
       </b-jumbotron>
 
-        <b-container >
+        <b-container class="my-4">
               <b-row>
-              <b-card-group deck>
+              <b-card-group deck >
                 <div class="col-md-4" :key="asset.id" v-for="asset in assets">
-                <Asset :asset="asset" :casing="casing" @nAssetToPool="buildNumberAssetToPool"/>
+                <Asset :asset="asset" :casing="casing" @nAssetToTransfer="buildNumberAssetToTransfer"/>
             </div>   
               </b-card-group>
             </b-row>
@@ -36,13 +36,16 @@ export default {
   },
   data: function() {
     return {
+        lead: "Here you can find your personal assets NFT1155",
+        header:"My Assets",
+
         nToken: 0,
         pendingReward: 0,
         assets : [],
         casing: {
           type:"MY_ASSETS",
-          buttonChoose:false},
-        
+          buttonChoose:false
+        },
         nAssetToPool:{}
     }
   },
@@ -59,7 +62,7 @@ export default {
       console.log(this.nAssetToPool)
       contractsServices.transferAssetToPool(Object.keys(this.nAssetToPool),Object.values(this.nAssetToPool))
   },
-  buildNumberAssetToPool: function(id, num){
+  buildNumberAssetToTransfer: function(id, num){
     console.log(id, num)
     this.nAssetToPool[id] = num
   }

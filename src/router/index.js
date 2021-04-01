@@ -4,7 +4,7 @@ import Home from '../views/Home.vue'
 
 import MyAssets from '@/components/MyAssets.vue'
 import MyPool from '@/components/MyPool.vue'
-import MyStore from '@/components/MyStore.vue'
+import Store from '@/components/Store.vue'
 
 Vue.use(VueRouter)
 
@@ -27,8 +27,8 @@ const routes = [
         component: MyPool
       },
       {
-        path: 'MyStore',
-        component: MyStore
+        path: 'Store',
+        component: Store
       }
     ]
   },

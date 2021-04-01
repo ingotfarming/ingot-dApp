@@ -3,31 +3,41 @@
 <b-container class= "my-5">
   <div>
     <b-card-group deck>
-      <b-card bg-variant="secondary" text-variant="white" title="Balance" class="text-center">
-            <b-card-text>
-              <b-row align-v="center">
-                <b-col>
-          <slot>
-          <h5 class="card-title text-uppercase text-muted mb-0">title</h5>
-          <span class="h2 font-weight-bold mb-0">sub</span>
-        </slot>
-                  {{nToken}}</b-col>
-                <b-col><div class="icon icon-shape text-white rounded-circle shadow bg-green"><font-awesome-icon icon="coins" size="lg" /> </div></b-col>
-              </b-row>
-            </b-card-text>
+      <b-card bg-variant="light" text-variant="black" align="center">
+          <b-card-text>
+            <b-row align-v="center">
+              <b-col><h4>Balance:</h4></b-col>
+              <b-col><h5>{{nToken}}</h5></b-col>
+            </b-row>
+            <b-row align-v="center">
+              <b-col><h4>ETH:</h4></b-col>
+              <b-col><h5>{{balanceETH}}</h5></b-col>
+            </b-row>
+          </b-card-text>
       </b-card>
 
-      <b-card bg-variant="secondary" text-variant="white" title="Power" class="text-center">
-        <b-card-text> {{powerInPool}} </b-card-text>
+      <b-card bg-variant="light" text-variant="black" align="center">
+        <b-card-text>
+          <b-row align-v="center">
+            <b-col><h4>Power Pool:</h4></b-col>
+            <b-col><h5>{{powerInPool}}</h5></b-col>
+          </b-row>
+      </b-card-text>
       </b-card>
 
-      <b-card bg-variant="secondary" text-variant="white" title="Pending Reward" class="text-center">
-        <b-card-text>{{pendingReward}}<button type="button" class="btn btn-sm btn-block btn-warning" @click="claim" >Claim</button> </b-card-text>
+      <b-card bg-variant="light" text-variant="black" align="center">
+        <b-card-text>
+          <b-row align-v="center">
+            <b-col><h4>Pending Reward:</h4></b-col>
+            <b-col><h5>{{pendingReward}}</h5><button type="button" class="btn btn-sm btn-block btn-warning" @click="claim">Claim</button></b-col>
+          </b-row>
+        </b-card-text>
       </b-card>
     </b-card-group>
-    
   </div>
   </b-container>
+
+<!--<b-col><div class="icon icon-shape text-white rounded-circle shadow bg-green"><font-awesome-icon icon="coins" size="lg" /> </div></b-col><-->
 <!--
     <div class="container">
       <div class="card-deck mb-3 text-center">
@@ -70,7 +80,8 @@ export default {
     return {
         nToken: 0,
         pendingReward: 0,
-        powerInPool:0
+        powerInPool:0,
+        balanceETH : 0
     }
   },
   computed:{},
@@ -78,6 +89,15 @@ export default {
       this.nToken = Number((await contractsServices.getBalanceOfFamToken())).toFixed(3);
       this.pendingReward = Number((await contractsServices.getStimateRewardPool())).toFixed(3);
       this.powerInPool= await (contractsServices.getPowerInPool());
+      this.balanceETH = await contractsServices.getBalanceETH()
+
+      /*
+      var assets = (await contractsServices.getBalanceOfFamAsset()).filter(function(asset) { return asset.number != 0})
+      var allAssets = contractsServices.getAllPowerOfAssets();
+      var intersectAsset = allAssets.filter(n => !assets.some(n2 => n.id == n2.id));
+      this.powerUnspent = intersectAsset.reduce((accumulator, currentValue) => accumulator + currentValue.power ,0);
+      */
+
   },
   methods: {
       claim: async function(){
