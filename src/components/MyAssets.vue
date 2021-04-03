@@ -23,9 +23,6 @@
 <script>
 import Asset from './Asset.vue'
 
-import ContractsServices from '../services/ContractsServices.js'
-const contractsServices = new ContractsServices();
-
 export default {
   name: 'MyAssets',
   components: {
@@ -51,7 +48,7 @@ export default {
   },
   computed:{},
   created: async function(){
-      this.assets = (await contractsServices.getBalanceOfFamAsset()).filter(function(asset) { return asset.number != 0})
+      this.assets = (await this.$contractService.getBalanceOfFamAsset()).filter(function(asset) { return asset.number != 0})
   },
   methods: {
     chooseButton: function(){
@@ -60,7 +57,7 @@ export default {
     },
     transferAsset: async function(){
       console.log(this.nAssetToPool)
-      contractsServices.transferAssetToPool(Object.keys(this.nAssetToPool),Object.values(this.nAssetToPool))
+      this.$contractService.transferAssetToPool(Object.keys(this.nAssetToPool),Object.values(this.nAssetToPool))
   },
   buildNumberAssetToTransfer: function(id, num){
     console.log(id, num)

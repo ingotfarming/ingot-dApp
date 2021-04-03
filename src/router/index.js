@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 
 import MyAssets from '@/components/MyAssets.vue'
-import MyPool from '@/components/MyPool.vue'
+import MyFarm from '@/components/MyFarm.vue'
 import Store from '@/components/Store.vue'
 
 Vue.use(VueRouter)
@@ -23,8 +23,8 @@ const routes = [
         component: MyAssets
       },
       {
-        path: 'MyPool',
-        component: MyPool
+        path: 'MyFarm',
+        component: MyFarm
       },
       {
         path: 'Store',

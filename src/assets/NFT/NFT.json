@@ -2,35 +2,35 @@
     {
       "id":0,
       "power":1,
-      "price":0.001,
+      "price":0,
       "name": "Trattore",
       "text": "Automezzo a ruote gommate o no, con cingoli o semicingolato, capace di sviluppare un elevato sforzo di trazione, usato per il rimorchio di veicoli, macchine agricole, natanti, ecc."
     },
     {
       "id":1,
       "power":10,
-      "price":0.001,
+      "price":0,
       "name": "Zappatrice",
       "text": "Automezzo a ruote gommate o no, con cingoli o semicingolato, capace di sviluppare un elevato sforzo di trazione, usato per il rimorchio di veicoli, macchine agricole, natanti, ecc."
     },
     {
       "id":2,
       "power":9,
-      "price":0.001,
+      "price":0,
       "name": "Trattore con Rimorchi",
       "text": "Automezzo a ruote gommate o no, con cingoli o semicingolato, capace di sviluppare un elevato sforzo di trazione, usato per il rimorchio di veicoli, macchine agricole, natanti, ecc."
     },
     {
       "id":3,
       "power":9,
-      "price":0.001,
+      "price":0,
       "name": "Trattore con Rimorchi2",
       "text": "Automezzo a ruote gommate o no, con cingoli o semicingolato, capace di sviluppare un elevato sforzo di trazione, usato per il rimorchio di veicoli, macchine agricole, natanti, ecc."
     },
     {
       "id":4,
       "power":9,
-      "price":0.001,
+      "price":0,
       "name": "Trattore con Rimorchi3",
       "text": "Automezzo a ruote gommate o no, con cingoli o semicingolato, capace di sviluppare un elevato sforzo di trazione, usato per il rimorchio di veicoli, macchine agricole, natanti, ecc."
     }

@@ -46,8 +46,6 @@
 </template>
 
 <script>
-import ContractsServices from '../services/ContractsServices.js'
-const contractsServices = new ContractsServices();
 export default {
   name: 'Asset',
   props: {
@@ -58,10 +56,10 @@ export default {
     return {
       id: this.asset.id,
       numberAsset: this.asset.number,
-      name : contractsServices.getNFTMetaData()[this.asset.id].name,
-      text : contractsServices.getNFTMetaData()[this.asset.id].text,
-      power: contractsServices.getNFTMetaData()[this.asset.id].power,
-      price: contractsServices.getNFTMetaData()[this.asset.id].price,
+      name : this.$contractService.getNFTs()[this.asset.id].name,
+      text : this.$contractService.getNFTs()[this.asset.id].text,
+      power: this.$contractService.getNFTs()[this.asset.id].power,
+      price: this.$contractService.getNFTs()[this.asset.id].price,
       
       numberAssetSelected:0,
 
@@ -69,7 +67,11 @@ export default {
   },
   computed:{
   },
-  created: function(){
+  created: async function(){
+    this.price =  await this.$contractService.getPrice(this.id);
+    console.log("getPrice:",this.id, this.price )
+    this.power =  await this.$contractService.getPower(this.id);
+    console.log("getPower:",this.id, this.power )
   },
   methods: {
   }

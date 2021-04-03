@@ -14,7 +14,7 @@
            <p>Buy Token From ETH</p>
            <b-form-input v-model="ETHforBuy" :id="buyInput" type="number" size="sm"></b-form-input>
            <b-button-group size="sm">
-              <b-button @click="buyTokens()">Buy</b-button>
+              <b-button @click="buyTokens(ETHforBuy)">Buy</b-button>
             </b-button-group>
            </b-col>
         </b-row>
@@ -34,9 +34,6 @@
 
 <script>
 import Asset from './Asset.vue'
-
-import ContractsServices from '../services/ContractsServices.js'
-const contractsServices = new ContractsServices();
 
 export default {
   name: 'Store',
@@ -61,7 +58,7 @@ export default {
   },
   computed:{},
   created: function(){
-      this.assets = contractsServices.getNFTMetaData()
+      this.assets = this.$contractService.getNFTs()
       console.log(this.assets)
   },
   methods: {
@@ -71,12 +68,10 @@ export default {
     },
     approveAsset: async function() {
 
-      contractsServices.approveTransferToStore(this.totalPrice);
+      this.$contractService.approveTransferToStore(this.totalPrice);
     },
     transferAsset: async function(){
-      await contractsServices.approveTransferToStore(1);
-      console.log(this.nAssetToPool)
-      contractsServices.buyBatchFromStore(Object.keys(this.nAssetToUser),Object.values(this.nAssetToUser))
+      this.$contractService.buyBatchFromStore(Object.keys(this.nAssetToUser),Object.values(this.nAssetToUser))
   },
   buildNumberAssetToTransfer: function(id, num, price){
     if(num>0){
@@ -95,7 +90,8 @@ export default {
     console.log(this.totalPrice);
     },
   buyTokens: function(amounts){
-    contractsServices.buyTokens(amounts);
+    console.log(amounts)
+    this.$contractService.buyTokens(amounts);
 
   }
 

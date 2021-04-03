@@ -1,4 +1,5 @@
 import { FAMToken, FAMAsset, Pool, Store, NFT } from '../assets'
+import Vue from 'vue'
 
 //import Web3 from './web3'
 import moment from 'moment'
@@ -9,53 +10,78 @@ import { BN } from "web3-utils";
 //let web3 = new Web3(new Web3.providers.HttpProvider(“http://localhost:9545"))
 const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
 
-const FAM_TOKEN_ADDRESS = "0x79E5Da24447A006A95b33b8AB39C6FD623ce31dE";
-const FAM_ASSET_ADDRESS=  "0x10622F09fa6ed1dEc50cd3727B1F97731Db66aAD";
-const POOL_ADDRESS=  "0xe033aC4286a49B0c5d8826749D2a66322DFa3106";
-const STORE_ADDRESS = "0xa91c80cDd1472Abc5fCEb47F6cE103028b0F319A";
+const FAM_TOKEN_ADDRESS = "0xeaaf21DBAD3a90Bb8d2dD6D623cA906dd40B7C54";
+const FAM_ASSET_ADDRESS=  "0x7CE17D3c0ECAe4e53504aAB74bC49a8187a32124";
+const POOL_ADDRESS=  "0xe8CAFA7Aca9ED059311d91A62eFb42390a93c241";
+const STORE_ADDRESS = "0xB0fF680B6a37DD5b5DFFf8dc18AE71f35A632eE3";
 
 const NUM_ASSET_TYPES = NFT.length;
 
 
 class ContractsServices {
-    constructor() {
+     constructor() {
+        Vue.$log.debug("constructor ContractsServices");
         this.famTokenContract = new web3.eth.Contract(FAMToken.abi, FAM_TOKEN_ADDRESS);
         this.famAssetContract = new web3.eth.Contract(FAMAsset.abi, FAM_ASSET_ADDRESS);
         this.poolContract = new web3.eth.Contract(Pool.abi, POOL_ADDRESS);
         this.storeContract = new web3.eth.Contract(Store.abi, STORE_ADDRESS);
-
+        
+        this.NFTs = NFT;
+        this.prices = {};
+        this.powers = {};
       }
-    getNFTMetaData = function() {return NFT}
-    getAllPowerOfAssets = function(){
-        return NFT;
+
+
+    async getPrice(id){
+        if(!Object.prototype.hasOwnProperty.call(this.prices,id)){
+            const accounts = await web3.eth.getAccounts()
+            var price = await this.storeContract.methods.priceNft(id).call({from: accounts[0]})
+            this.prices[id] = web3.utils.fromWei(price);
+            Vue.$log.debug("getPrice ", price)
+        }
+        return this.prices[id];  
+     }
+    async getPower(id){
+        if(!Object.prototype.hasOwnProperty.call(this.powers,id)){
+            const accounts = await web3.eth.getAccounts()
+            var power = (await this.famAssetContract.methods.assets(id).call({from: accounts[0]}))[2];
+            this.powers[id] = power;
+            Vue.$log.debug("getPower ", power)
+        }
+        return this.powers[id];  
+     }
+    getNFTs() {return this.NFTs}
+    getAllPowerOfAssets(){
+        return this.NFTs;
     }
 
-    getBalanceOfFamToken = async function() {
+    async getBalanceOfFamToken() {
         var balanceWei = 0;
         try {
             const accounts = await web3.eth.getAccounts()
             let balance = await this.famTokenContract.methods.balanceOf(accounts[0]).call({from: accounts[0]})
-            console.log('getBalanceOfFamToken ', accounts[0], balance)
+            Vue.$log.debug('getBalanceOfFamToken ', accounts[0], balance)
             balanceWei = web3.utils.fromWei(balance)
         } catch(e) {
-            console.log(e);
+            Vue.$log.debug(e);
         }
         return balanceWei;
     }
 
-    getBalanceETH = async function () {
+    async getBalanceETH() {
         const accounts = await web3.eth.getAccounts()
-        return web3.utils.fromWei(await web3.eth.getBalance(accounts[0]));
+        let amount = web3.utils.fromWei(await web3.eth.getBalance(accounts[0]));
+        Vue.$log.debug('getBalanceETH', amount);
+        return amount;
     }
     // FAM Asset
-    getBalanceOfFamAsset = async function() {
+    async getBalanceOfFamAsset() {
         const accounts = await web3.eth.getAccounts()
         const accountsData = Array(NUM_ASSET_TYPES).fill(accounts[0])
         const keysData = Array.from(Array(NUM_ASSET_TYPES).keys())
-        
-        console.log('getBalanceOfFamAsset ', accountsData, keysData)
+        Vue.$log.debug('getBalanceOfFamAsset Request', accountsData, keysData);
         let batch = await this.famAssetContract.methods.balanceOfBatch(accountsData, keysData).call({from: accounts[0]})
-        console.log(batch)
+        Vue.$log.debug('getBalanceOfFamAsset Response', batch);
         var response = [];
         for(let i=0;i<batch.length;i++){
             response.push({
@@ -65,30 +91,30 @@ class ContractsServices {
         }
         return response;
     }
-    transferAssetToPool = async function(idAssets, numAssets){
+    async transferAssetToPool(idAssets, numAssets){
 
         const accounts = await web3.eth.getAccounts()
         
-        console.log('transferAssetToPool ', idAssets, numAssets, accounts[0], POOL_ADDRESS)
+        Vue.$log.debug('transferAssetToPool ', idAssets, numAssets, accounts[0], POOL_ADDRESS)
         let response = await this.famAssetContract.methods.safeBatchTransferFrom(accounts[0], POOL_ADDRESS, idAssets, numAssets, 0).send({from: accounts[0],gas:3000000})
-        console.log(response)
+        Vue.$log.debug(response)
 
         return response
     }
 
     // POOL
-    getAssetInPool = async function() {
+    async getAssetInPool() {
         //getUserNumberAsset(address addr, uint256 assetType) public view returns(uint256)
 
         const accounts = await web3.eth.getAccounts()
         const accountsData = Array(NUM_ASSET_TYPES).fill(accounts[0])
         const keysData = Array.from(Array(NUM_ASSET_TYPES).keys())
         var batch = []
-        console.log('getAssetInPool ', accountsData, keysData)
+        Vue.$log.debug('getAssetInPool ', accountsData, keysData)
         for(let i=0; i<accountsData.length;i++){
             batch.push(await this.poolContract.methods.getUserNumberAsset(accountsData[i], keysData[i]).call({from: accounts[0]}))
         }
-        console.log(response)
+        Vue.$log.debug(response)
         
         var response = [];
         for(let i=0;i<batch.length;i++){
@@ -100,68 +126,70 @@ class ContractsServices {
         return response;
     }
 
-    getStimateRewardPool = async function() {
+    async getStimateRewardPool() {
         //stimateReward(address addr) public view returns(uint256){
         const accounts = await web3.eth.getAccounts()
-        console.log("getStimateRewardPool ", accounts[0] )
+        Vue.$log.debug("getStimateRewardPool ", accounts[0] )
         var response = await this.poolContract.methods.stimateReward().call({from: accounts[0]})
-        console.log(response)
+        Vue.$log.debug(response)
         var balanceWei = web3.utils.fromWei(response)
         return balanceWei;
     }
 
-    getPowerInPool = async function() {
+    async getUserInfo() {
         //stimateReward(address addr) public view returns(uint256){
         const accounts = await web3.eth.getAccounts()
-        console.log("getPowerInPool ", accounts[0] )
+        Vue.$log.debug("getUserInfo ", accounts[0] )
         var response = await this.poolContract.methods.getUserInfo(accounts[0]).call({from: accounts[0]})
-        console.log(response)
+        Vue.$log.debug("getUserInfo", response);
         return response[0];
     }
 
-    claimFromPool = async function() {
+    async claimFromPool() {
         //stimateReward(address addr) public view returns(uint256){
         const accounts = await web3.eth.getAccounts()
-        console.log("claimFromPool ", accounts[0] )
+        Vue.$log.debug("claimFromPool ", accounts[0] )
         var response = await this.poolContract.methods.claim().send({from: accounts[0], gas:3000000})
-        console.log(response)
+        Vue.$log.debug(response)
         return response;
     }
 
-    retrieveFromPool = async function(idAssets, numAssets) {
+    async retrieveFromPool(idAssets, numAssets) {
     //function retrieve(uint256[] memory _ids, uint256[] memory _values) public nonReentrant {
         const accounts = await web3.eth.getAccounts()
-        console.log("retrieveFromPool ", idAssets, numAssets)
+        Vue.$log.debug("retrieveFromPool ", idAssets, numAssets)
         var response = await this.poolContract.methods.retrieve(idAssets, numAssets).send({from: accounts[0], gas:3000000})
-        console.log(response)
+        Vue.$log.debug(response)
         return response;
     }
 
-    getPriceFromStore = async function(){
-        var response = []
+    async getPriceFromStore(){
+        var response = {}
         const accounts = await web3.eth.getAccounts()
-        for(let i; i<NUM_ASSET_TYPES;i++){
-            var price = this.storeContract.methods.priceNft(NFT[i].id).call({from: accounts[0]})
-            response.push({id: NFT[i].id, price: price})
+        for(let i=0; i<this.NFTs.length;i++){
+            var price = await this.storeContract.methods.priceNft(this.NFTs[i].id).call({from: accounts[0]})
+            response[this.NFTs[i].id] = web3.utils.fromWei(price);
         }
+        Vue.$log.debug("getPriceFromStore ", response)
         return response   
     }
 
-    approveTransferToStore  = async function(amount){  
+    async approveTransferToStore(amount){  
         const accounts = await web3.eth.getAccounts()
         let amountWei = web3.utils.toWei(new BN(amount));
+        Vue.$log.debug("approveTransferToStore ", amount)
+        Vue.$log.debug("approveTransferToStore ", amountWei.toString())
         await this.famTokenContract.methods.approve(STORE_ADDRESS,amountWei).send({from: accounts[0], gas:3000000})
-
     } 
-    buyBatchFromStore  = async function(ids, amounts){  
+    async buyBatchFromStore(ids, amounts){  
         const accounts = await web3.eth.getAccounts()
-        console.log(ids,amounts)
+        Vue.$log.debug(ids,amounts)
         await this.storeContract.methods.buyBatchNft(ids, amounts).send({from: accounts[0], gas:3000000})
     }
-    buyTokens = async function(etherAmount){
+    async buyTokens(etherAmount){
         const accounts = await web3.eth.getAccounts()
         let amountsWei = web3.utils.toWei(etherAmount)
-        await this.storeContract.methods.buyTokens(amountsWei).send({from: accounts[0], gas:3000000})
+        await this.storeContract.methods.buyTokens().send({from: accounts[0], gas:3000000,value: amountsWei})
     }
 
     createContract = async function () {

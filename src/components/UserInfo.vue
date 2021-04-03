@@ -66,8 +66,6 @@
 
 <script>
 
-import ContractsServices from '../services/ContractsServices.js'
-const contractsServices = new ContractsServices();
 
 export default {
   name: 'UserInfo',
@@ -86,10 +84,10 @@ export default {
   },
   computed:{},
   created: async function(){
-      this.nToken = Number((await contractsServices.getBalanceOfFamToken())).toFixed(3);
-      this.pendingReward = Number((await contractsServices.getStimateRewardPool())).toFixed(3);
-      this.powerInPool= await (contractsServices.getPowerInPool());
-      this.balanceETH = await contractsServices.getBalanceETH()
+      this.nToken = Number((await this.$contractService.getBalanceOfFamToken())).toFixed(3);
+      this.pendingReward = Number((await this.$contractService.getStimateRewardPool())).toFixed(3);
+      this.powerInPool= await (this.$contractService.getUserInfo());
+      this.balanceETH = await this.$contractService.getBalanceETH()
 
       /*
       var assets = (await contractsServices.getBalanceOfFamAsset()).filter(function(asset) { return asset.number != 0})
@@ -101,7 +99,7 @@ export default {
   },
   methods: {
       claim: async function(){
-        contractsServices.claimFromPool();
+        this.$contractService.claimFromPool();
       }
   }
 }

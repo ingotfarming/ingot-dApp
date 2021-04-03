@@ -13,8 +13,6 @@ import MyPool from './MyPool.vue'
 import MyStore from './MyStore.vue'
 */
 
-import ContractsServices from '../services/ContractsServices.js'
-const contractsServices = new ContractsServices();
 
 export default {
   name: 'Core',
@@ -36,15 +34,15 @@ export default {
 
       },
       getBalance: async function() {
-          this.nToken = await contractsServices.getBalanceOfFamToken();
-          await contractsServices.getBalanceOfFamAsset();
+          this.nToken = await this.$contractService.getBalanceOfFamToken();
+          await this.$contractService.getBalanceOfFamAsset();
  
-          await contractsServices.getAssetInPool();
-          await contractsServices.getPowerInPool();  
-          await contractsServices.getStimateRewardPool();      
+          await this.$contractService.getAssetInPool();
+          await this.$contractService.getPowerInPool();  
+          await this.$contractService.getStimateRewardPool();      
       },
       getAllAsset: async function() {
-          await contractsServices.getBalanceOfFamAsset();
+          await this.$contractService.getBalanceOfFamAsset();
       }
   }
 }

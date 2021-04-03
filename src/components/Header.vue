@@ -5,7 +5,7 @@
     <b-navbar-nav>
       <b-nav-item href="/">Home</b-nav-item>
       <b-nav-item href="/MyAssets">My Assets</b-nav-item>
-      <b-nav-item href="/MyPool">My Farm</b-nav-item>
+      <b-nav-item href="/MyFarm">My Farm</b-nav-item>
       <b-nav-item href="/Store">Store</b-nav-item>
     </b-navbar-nav>
     </b-container>

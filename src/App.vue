@@ -17,6 +17,9 @@ export default {
     Header,
     Footer
   },
+  async created(){
+    await this.$contractService.init();
+  }
 }
 </script>
 
