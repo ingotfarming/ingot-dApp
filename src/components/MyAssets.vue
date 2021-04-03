@@ -5,10 +5,10 @@
         <p>Select Assets to transfer</p>
           <b-button-group size="lg">
             <b-button @click="chooseButton()">Choose Assets</b-button>
-            <b-button :disabled="!this.casing.buttonChoose" variant="danger"  @click="transferAsset()">Transfer Assets</b-button>
+            <b-button :disabled="!this.casing.buttonChoose" variant="success" @click="transferAsset()">Transfer Assets</b-button>
           </b-button-group>
+      
       </b-jumbotron>
-
         <b-container class="my-4">
               <b-row>
               <b-card-group deck >

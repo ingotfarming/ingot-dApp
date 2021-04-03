@@ -5,18 +5,10 @@
       <b-row><b-col>
         <p>Select Assets to transfer</p>
           <b-button-group size="lg">
-            <b-button @click="chooseButton()">Choose Assets</b-button>
-            <b-button @click="approveAsset()">Approve</b-button>
-            <b-button :disabled="!this.casing.buttonChoose" variant="danger"  @click="transferAsset()">Transfer Assets</b-button>
+            <b-button @click="approveAsset()" >Approve</b-button>
+            <b-button :disabled="!this.casing.buttonChoose" variant="success"  @click="transferAsset()">Transfer Assets</b-button>
           </b-button-group>
         </b-col>
-         <b-col>
-           <p>Buy Token From ETH</p>
-           <b-form-input v-model="ETHforBuy" :id="buyInput" type="number" size="sm"></b-form-input>
-           <b-button-group size="sm">
-              <b-button @click="buyTokens(ETHforBuy)">Buy</b-button>
-            </b-button-group>
-           </b-col>
         </b-row>
       </b-jumbotron>
 
@@ -46,7 +38,7 @@ export default {
   data: function() {
     return {
         lead: "Here you can find your assets NFT1155 in staking",
-        header:"My Store",
+        header:"Store",
         assets : [],
         casing: {
           type:"STORE",
@@ -62,12 +54,8 @@ export default {
       console.log(this.assets)
   },
   methods: {
-    chooseButton: function(){
-      this.casing.buttonChoose = !this.casing.buttonChoose
-      console.log(this.casing.buttonChoose)
-    },
     approveAsset: async function() {
-
+      this.casing.buttonChoose = !this.casing.buttonChoose
       this.$contractService.approveTransferToStore(this.totalPrice);
     },
     transferAsset: async function(){

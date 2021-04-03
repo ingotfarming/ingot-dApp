@@ -7,6 +7,7 @@
       <b-nav-item href="/MyAssets">My Assets</b-nav-item>
       <b-nav-item href="/MyFarm">My Farm</b-nav-item>
       <b-nav-item href="/Store">Store</b-nav-item>
+      <b-nav-item href="/PreSale">Pre Sale</b-nav-item>
     </b-navbar-nav>
     </b-container>
   </b-navbar>

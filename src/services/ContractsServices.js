@@ -50,6 +50,24 @@ class ContractsServices {
         }
         return this.powers[id];  
      }
+    async getMaxAmountAllowedNft(id){
+        const accounts = await web3.eth.getAccounts();
+        var maxAmount = await this.storeContract.methods.maxAmountAllowedNft(id).call({from: accounts[0]});
+        Vue.$log.debug("getMaxAmountAllowedNft ", id, maxAmount);
+        return maxAmount;
+    }
+    async getFactorWeiToken(){
+        const accounts = await web3.eth.getAccounts();
+        var value = await this.storeContract.methods.factorWeiToken().call({from: accounts[0]});
+        Vue.$log.debug("getFactorWeiToken ", value);
+        return value; 
+    }
+    async getMinedNft(id){
+        const accounts = await web3.eth.getAccounts();
+        var mined = await this.storeContract.methods.minedNft(id).call({from: accounts[0]});
+        Vue.$log.debug("getMinedNft ", id, mined);
+        return mined;
+    }
     getNFTs() {return this.NFTs}
     getAllPowerOfAssets(){
         return this.NFTs;
