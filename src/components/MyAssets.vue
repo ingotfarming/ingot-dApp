@@ -1,6 +1,6 @@
 <template>
 <div>
-    <b-jumbotron :header="header" :lead="lead" fluid=false class="py-4">
+    <b-jumbotron :header="header" :lead="lead" fluid=true class="py-4">
       <hr class="my-4">
         <p>Select Assets to transfer</p>
           <b-button-group size="lg">

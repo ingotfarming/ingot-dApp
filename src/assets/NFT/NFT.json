@@ -3,7 +3,7 @@
       "id":0,
       "power":1,
       "price":0,
-      "name": "Trattore",
+      "name": "Bufalo",
       "text": "Automezzo a ruote gommate o no, con cingoli o semicingolato, capace di sviluppare un elevato sforzo di trazione, usato per il rimorchio di veicoli, macchine agricole, natanti, ecc."
     },
     {
@@ -17,7 +17,7 @@
       "id":2,
       "power":9,
       "price":0,
-      "name": "Trattore con Rimorchi",
+      "name": "Farm",
       "text": "Automezzo a ruote gommate o no, con cingoli o semicingolato, capace di sviluppare un elevato sforzo di trazione, usato per il rimorchio di veicoli, macchine agricole, natanti, ecc."
     },
     {

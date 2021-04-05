@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Core from '../views/Core.vue'
 
 import MyAssets from '@/components/MyAssets.vue'
 import MyFarm from '@/components/MyFarm.vue'
@@ -15,6 +16,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/App',
+    name: 'App',
+    component: Core,
     children: [
       {
         path: '',
