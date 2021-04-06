@@ -16,7 +16,7 @@
               <b-row>
               <b-card-group deck >
                 <div class="col-md-4" :key="asset.id" v-for="asset in assets">
-                <Asset :asset="asset" :casing="casing" @nAssetToTransfer="buildNumberAssetToTransfer"/>
+                <Asset :asset="asset"  :id="asset.id" :numberAsset="asset.number" :casing="casing" @nAssetToTransfer="buildNumberAssetToTransfer"/>
             </div>   
               </b-card-group>
             </b-row>
@@ -50,17 +50,34 @@ export default {
   },
   computed:{},
   created: function(){
-      this.assets = this.$contractService.getNFTs()
-      console.log(this.assets)
+      this.initAsset();
   },
   methods: {
+    initAsset: async function(){
+        this.assets = await this.$contractService.getNFTs()
+    },
+    transferAsset: async function(){
+    try{
+      let result = await this.$contractService.buyBatchFromStore(Object.keys(this.nAssetToUser),Object.values(this.nAssetToUser));
+      this.$log.debug(result)
+      if(result){
+        this.$Swal.fire('Good job!','You clicked the button!','success');
+      }else{
+      this.$Swal.fire('Oops','Something went wrong!','error');
+      }
+    }catch(message){
+      this.$log.error(message);
+      this.$Swal.fire('Oops','Something went wrong!','error');
+    }finally{
+        this.initAsset();
+    }
+  },
+
     approveAsset: async function() {
       this.casing.buttonChoose = !this.casing.buttonChoose
       this.$contractService.approveTransferToStore(this.totalPrice);
     },
-    transferAsset: async function(){
-      this.$contractService.buyBatchFromStore(Object.keys(this.nAssetToUser),Object.values(this.nAssetToUser))
-  },
+
   buildNumberAssetToTransfer: function(id, num, price){
     if(num>0){
     console.log(id, num, price)

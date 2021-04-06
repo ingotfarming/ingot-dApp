@@ -49,20 +49,21 @@ export default {
   name: 'Asset',
   props: {
     asset: Object,
+    id: Number,
+    numberAsset: Number,
     casing: Object
   },
   data: function() {
     return {
-      id: this.asset.id,
-      numberAsset: this.asset.number,
-      name : this.$contractService.getNFTs()[this.asset.id].name,
-      text : this.$contractService.getNFTs()[this.asset.id].text,
-      power: this.$contractService.getNFTs()[this.asset.id].power,
-      price: this.$contractService.getNFTs()[this.asset.id].price,
+      //id: this.asset.id,
+      //numberAsset: this.asset.number,
+      name : this.$contractService.getNFTs()[this.id].name,
+      text : this.$contractService.getNFTs()[this.id].text,
+      power: this.$contractService.getNFTs()[this.id].power,
+      price: this.$contractService.getNFTs()[this.id].price,
       minedNfts : 0,
       maxAmountNfts: 0,
 
-      
       numberAssetSelected:0,
 
     }

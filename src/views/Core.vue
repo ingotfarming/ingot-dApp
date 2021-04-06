@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <b-row>
         <Sidebar/>
-        <div class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="col-md-10 ml-sm-auto col-lg-10 px-4">
           <UserInfo/>
           <router-view/>
         </div>
@@ -101,9 +101,10 @@ body {
   color: #999;
 }
 
-.sidebar .nav-link.active {
-  color: #007bff;
-}
+ .sidebar .nav-link.router-link-active,
+ .sidebar .nav-link.router-link-exact-active {
+  color: #007bff
+ }
 
 .sidebar .nav-link:hover .feather,
 .sidebar .nav-link.active .feather {

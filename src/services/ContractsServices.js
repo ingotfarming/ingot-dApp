@@ -1,14 +1,14 @@
 import { FAMToken, FAMAsset, Pool, Store, NFT } from '../assets'
 import Vue from 'vue'
 
-//import Web3 from './web3'
+import web3 from './web3Providers'
 import moment from 'moment'
 
 import Web3 from 'web3';
 import { BN } from "web3-utils";
 
 //let web3 = new Web3(new Web3.providers.HttpProvider(“http://localhost:9545"))
-const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+//const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
 
 const FAM_TOKEN_ADDRESS = "0xeaaf21DBAD3a90Bb8d2dD6D623cA906dd40B7C54";
 const FAM_ASSET_ADDRESS=  "0x7CE17D3c0ECAe4e53504aAB74bC49a8187a32124";
@@ -117,7 +117,7 @@ class ContractsServices {
         let response = await this.famAssetContract.methods.safeBatchTransferFrom(accounts[0], POOL_ADDRESS, idAssets, numAssets, 0).send({from: accounts[0],gas:3000000})
         Vue.$log.debug(response)
 
-        return response
+        return response.status
     }
 
     // POOL
@@ -169,7 +169,7 @@ class ContractsServices {
         Vue.$log.debug("claimFromPool ", accounts[0] )
         var response = await this.poolContract.methods.claim().send({from: accounts[0], gas:3000000})
         Vue.$log.debug(response)
-        return response;
+        return response.status;
     }
 
     async retrieveFromPool(idAssets, numAssets) {
@@ -178,7 +178,7 @@ class ContractsServices {
         Vue.$log.debug("retrieveFromPool ", idAssets, numAssets)
         var response = await this.poolContract.methods.retrieve(idAssets, numAssets).send({from: accounts[0], gas:3000000})
         Vue.$log.debug(response)
-        return response;
+        return response.status;
     }
 
     async getPriceFromStore(){
@@ -202,12 +202,14 @@ class ContractsServices {
     async buyBatchFromStore(ids, amounts){  
         const accounts = await web3.eth.getAccounts()
         Vue.$log.debug(ids,amounts)
-        await this.storeContract.methods.buyBatchNft(ids, amounts).send({from: accounts[0], gas:3000000})
+        let response = await this.storeContract.methods.buyBatchNft(ids, amounts).send({from: accounts[0], gas:3000000})
+        return response.status
     }
     async buyTokens(etherAmount){
         const accounts = await web3.eth.getAccounts()
         let amountsWei = web3.utils.toWei(etherAmount)
-        await this.storeContract.methods.buyTokens().send({from: accounts[0], gas:3000000,value: amountsWei})
+        let response = await this.storeContract.methods.buyTokens().send({from: accounts[0], gas:3000000,value: amountsWei})
+        return response.status
     }
 
     createContract = async function () {

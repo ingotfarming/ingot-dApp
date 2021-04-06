@@ -52,9 +52,20 @@ export default {
     this.conversion = await this.$contractService.getFactorWeiToken();
   },
   methods: {
-  buyTokens: function(amounts){
-    this.$log.debug(amounts)
-    this.$contractService.buyTokens(amounts);
+  buyTokens: async function(amounts){
+      try{
+      let result = await this.$contractService.buyTokens(amounts);
+      this.$log.debug(result)
+      if(result){
+        this.$Swal.fire('Good job!','You clicked the button!','success');
+      }else{
+      this.$Swal.fire('Oops','Something went wrong!','error');
+      }
+    }catch(message){
+      this.$log.error(message);
+      this.$Swal.fire('Oops','Something went wrong!','error');
+    }
+   
   },
   convEthToToken: function(amounts){
    this.tokens = amounts * this.conversion;

@@ -89,17 +89,24 @@ export default {
       this.powerInPool= await (this.$contractService.getUserInfo());
       this.balanceETH = await this.$contractService.getBalanceETH()
 
-      /*
-      var assets = (await contractsServices.getBalanceOfFamAsset()).filter(function(asset) { return asset.number != 0})
-      var allAssets = contractsServices.getAllPowerOfAssets();
-      var intersectAsset = allAssets.filter(n => !assets.some(n2 => n.id == n2.id));
-      this.powerUnspent = intersectAsset.reduce((accumulator, currentValue) => accumulator + currentValue.power ,0);
-      */
-
   },
   methods: {
       claim: async function(){
-        this.$contractService.claimFromPool();
+        try{
+          let result = await this.$contractService.claimFromPool();
+          this.$log.debug("claim", result)
+          if(result){
+            this.$Swal.fire('Good job!','You clicked the button!','success');
+          }else{
+          this.$Swal.fire('Oops','Something went wrong!','error');
+          }
+        }catch(message){
+          this.$log.error(message);
+          this.$Swal.fire('Oops','Something went wrong!','error');
+        }finally{
+            this.nToken = Number((await this.$contractService.getBalanceOfFamToken())).toFixed(3);
+            this.pendingReward = Number((await this.$contractService.getStimateRewardPool())).toFixed(3);
+        }
       }
   }
 }

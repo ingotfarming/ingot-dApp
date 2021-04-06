@@ -13,7 +13,7 @@
               <b-row>
               <b-card-group deck >
                 <div class="col-md-4" :key="asset.id" v-for="asset in assets">
-                <Asset :asset="asset" :casing="casing" @nAssetToTransfer="buildNumberAssetToTransfer"/>
+                <Asset :asset="asset"  :id="asset.id" :numberAsset="asset.number" :casing="casing" @nAssetToTransfer="buildNumberAssetToTransfer"/>
             </div>   
               </b-card-group>
             </b-row>
@@ -45,16 +45,32 @@ export default {
   },
   computed:{},
   created: async function(){
-      this.assets = (await this.$contractService.getAssetInPool()).filter(function(asset) { return asset.number != 0});
+      this.initAsset();
   },
   methods: {
+    initAsset: async function(){
+      this.assets = (await this.$contractService.getAssetInPool()).filter(function(asset) { return asset.number != 0});
+    },
     chooseButton: function(){
       this.casing.buttonChoose = !this.casing.buttonChoose
       console.log(this.casing.buttonChoose)
     },
+  
     transferAsset: async function(){
-      console.log(this.nAssetToPool)
-      this.$contractService.retrieveFromPool(Object.keys(this.nAssetToUser),Object.values(this.nAssetToUser))
+    try{
+      let result = await this.$contractService.retrieveFromPool(Object.keys(this.nAssetToUser),Object.values(this.nAssetToUser));
+      this.$log.debug(result)
+      if(result){
+        this.$Swal.fire('Good job!','You clicked the button!','success');
+      }else{
+      this.$Swal.fire('Oops','Something went wrong!','error');
+      }
+    }catch(message){
+      this.$log.error(message);
+      this.$Swal.fire('Oops','Something went wrong!','error');
+    }finally{
+        this.initAsset();
+    }
   },
   buildNumberAssetToTransfer: function(id, num){
     console.log(id, num)

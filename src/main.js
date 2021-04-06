@@ -13,6 +13,8 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import router from './router'
 
+import Swal from 'sweetalert2'
+
 import ContractsServices from '@/services/ContractsServices.js'
 
 library.add(faUserSecret,faBtc,faCoins)
@@ -23,11 +25,7 @@ Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
 
-
-
 Vue.config.productionTip = false
-
-
 
 
 // Logger configuration
@@ -45,6 +43,7 @@ Vue.use(VueLogger, options);
 
 // api services
 Vue.prototype.$contractService =  new ContractsServices();
+Vue.prototype.$Swal =  Swal;
 
 
 new Vue({
