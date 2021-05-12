@@ -12,8 +12,7 @@ export default {
   components: {
 
   },
-  async created(){
-    await this.$contractService.init();
+  created:{
   }
 }
 </script>

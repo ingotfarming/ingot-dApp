@@ -1,7 +1,7 @@
 import { FAMToken, FAMAsset, Pool, Store, NFT } from '../assets'
 import Vue from 'vue'
 
-import web3 from './web3Providers'
+//import web3 from './web3Providers'
 import moment from 'moment'
 
 import Web3 from 'web3';
@@ -10,28 +10,35 @@ import { BN } from "web3-utils";
 //let web3 = new Web3(new Web3.providers.HttpProvider(“http://localhost:9545"))
 //const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
 
-const FAM_TOKEN_ADDRESS = "0xeaaf21DBAD3a90Bb8d2dD6D623cA906dd40B7C54";
-const FAM_ASSET_ADDRESS=  "0x7CE17D3c0ECAe4e53504aAB74bC49a8187a32124";
-const POOL_ADDRESS=  "0xe8CAFA7Aca9ED059311d91A62eFb42390a93c241";
-const STORE_ADDRESS = "0xB0fF680B6a37DD5b5DFFf8dc18AE71f35A632eE3";
+const FAM_TOKEN_ADDRESS = process.env.VUE_APP_FAM_TOKEN_ADDRESS;
+const FAM_ASSET_ADDRESS= process.env.VUE_APP_FAM_ASSET_ADDRESS;
+const POOL_ADDRESS= process.env.VUE_APP_POOL_ADDRESS;
+const STORE_ADDRESS= process.env.VUE_APP_STORE_ADDRESS;
 
 const NUM_ASSET_TYPES = NFT.length;
 
+var web3;
 
 class ContractsServices {
-     constructor() {
-        Vue.$log.debug("constructor ContractsServices");
+     
+    constructor() {
+        Vue.$log.debug("constructor");
+        this.NFTs = NFT;
+        this.prices = {};
+        this.powers = {};
+        this.famTokenContract = null;
+        this.famAssetContract = null;
+        this.poolContract = null;
+        this.storeContract = null;
+      }
+
+    _initContracts(){
+        Vue.$log.debug("initContracts");
         this.famTokenContract = new web3.eth.Contract(FAMToken.abi, FAM_TOKEN_ADDRESS);
         this.famAssetContract = new web3.eth.Contract(FAMAsset.abi, FAM_ASSET_ADDRESS);
         this.poolContract = new web3.eth.Contract(Pool.abi, POOL_ADDRESS);
         this.storeContract = new web3.eth.Contract(Store.abi, STORE_ADDRESS);
-        
-        this.NFTs = NFT;
-        this.prices = {};
-        this.powers = {};
       }
-
-
     async getPrice(id){
         if(!Object.prototype.hasOwnProperty.call(this.prices,id)){
             const accounts = await web3.eth.getAccounts()
@@ -326,6 +333,58 @@ class ContractsServices {
 
         return (accounts && accounts.length>0)?accounts[0]: undefined
     }
-}
 
+    async connectAccount(){
+        Vue.$log.debug("connectAccount");
+        if (window.ethereum) {
+            try {
+              await window.ethereum.request({ method: 'eth_requestAccounts' });
+              window.web3 = new Web3(window.ethereum);
+              web3 = window.web3;
+              this._initContracts();
+            } catch (error) {
+              // User denied account access...
+              console.log('User cancelled connect request. Error:', error);
+            }
+          } else if (window.web3) {
+            try {
+              window.web3 = new Web3(window.web3.currentProvider);
+              web3 = window.web3;
+              this._initContracts();
+            } catch (err) {
+              console.error('web3 error: ', err);
+            }
+          } else {
+            console.error('Non-Ethereum browser detected. Using Infura fallback.');
+          }
+        }
+
+        loadWeb3(){
+            Vue.$log.debug("loadWeb3");
+
+            if (window.ethereum) {
+              try {
+                window.web3 = new Web3(window.ethereum);
+                web3 = window.web3;
+                this._initContracts();
+              } catch (err) {
+                console.error('ethereum error: ', err);
+              }
+            } else if (window.web3) {
+              try {
+                window.web3 = new Web3(window.web3.currentProvider);
+                web3 = window.web3;
+                this._initContracts();
+              } catch (err) {
+                console.error('web3 error: ', err);
+              }
+            } else {
+              console.error('Non-Ethereum browser detected. Using Infura fallback.');
+            }
+          }
+          async isConnected(){
+            return ((await web3.eth.getAccounts()).length)>0
+
+          }
+}
 export default ContractsServices

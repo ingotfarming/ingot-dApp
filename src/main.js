@@ -5,7 +5,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faUserSecret,faCoins } from '@fortawesome/free-solid-svg-icons'
-import { faBtc } from '@fortawesome/free-brands-svg-icons'
+import { faBtc, faTwitter } from '@fortawesome/free-brands-svg-icons'
 import {  } from '@fortawesome/free-regular-svg-icons'
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)
@@ -17,7 +17,7 @@ import Swal from 'sweetalert2'
 
 import ContractsServices from '@/services/ContractsServices.js'
 
-library.add(faUserSecret,faBtc,faCoins)
+library.add(faUserSecret,faBtc,faCoins, faTwitter)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 // Make BootstrapVue available throughout your project
@@ -43,6 +43,7 @@ Vue.use(VueLogger, options);
 
 // api services
 Vue.prototype.$contractService =  new ContractsServices();
+Vue.prototype.$contractService.loadWeb3();
 Vue.prototype.$Swal =  Swal;
 
 

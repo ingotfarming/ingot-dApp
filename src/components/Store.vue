@@ -1,36 +1,39 @@
 <template>
 <div>
-    <b-jumbotron :header="header" :lead="lead" fluid=false class="py-4">
-      <hr class="my-4">
-      <b-row><b-col>
-        <p>Select Assets to transfer</p>
-          <b-button-group size="lg">
-            <b-button @click="approveAsset()" >Approve</b-button>
-            <b-button :disabled="!this.casing.buttonChoose" variant="success"  @click="transferAsset()">Transfer Assets</b-button>
-          </b-button-group>
-        </b-col>
-        </b-row>
-      </b-jumbotron>
-
-        <b-container class="my-4">
-              <b-row>
-              <b-card-group deck >
-                <div class="col-md-4" :key="asset.id" v-for="asset in assets">
-                <Asset :asset="asset"  :id="asset.id" :numberAsset="asset.number" :casing="casing" @nAssetToTransfer="buildNumberAssetToTransfer"/>
+    <b-jumbotron :header="header" :lead="lead" fluid=false class="py-4"></b-jumbotron>
+    <UserInfo/>
+    
+    <b-container class="container-asset my-4 p-3 px-5">
+      <div>
+        <h2 class="text-center">Select Assets to buy</h2>
+        <div class = "text-center my-3">
+            <b-button size="lg" pill @click="approveAsset()" class="mr-2">Approve</b-button>
+            <b-button size="lg" pill :disabled="!this.casing.buttonChoose" variant="success"  @click="transferAsset()">Buy</b-button>
+        </div>
+      </div>
+      <hr>
+      <div>
+          <b-card-group deck >
+            <div class="col-md-4 mb-3" :key="asset.id" v-for="asset in assets">
+              <Asset :asset="asset"  :id="asset.id" :numberAsset="asset.number" :casing="casing" @nAssetToTransfer="buildNumberAssetToTransfer"/>
             </div>   
-              </b-card-group>
-            </b-row>
+          </b-card-group>
+      </div>
     </b-container>
+
+
 </div>
 </template>
 
 <script>
 import Asset from './Asset.vue'
+import UserInfo from '@/components/UserInfo.vue'
 
 export default {
   name: 'Store',
   components: {
     Asset,
+    UserInfo
   },
   props: {
 

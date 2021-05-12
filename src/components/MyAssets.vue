@@ -7,8 +7,8 @@
             <b-button @click="chooseButton()">Choose Assets</b-button>
             <b-button :disabled="!this.casing.buttonChoose" variant="success" @click="transferAsset()">Transfer Assets</b-button>
           </b-button-group>
-      
       </b-jumbotron>
+            <UserInfo/>
         <b-container class="my-4">
               <b-row>
               <b-card-group deck >
@@ -21,12 +21,15 @@
 </div>
 </template>
 <script>
+
 import Asset from './Asset.vue'
+import UserInfo from '@/components/UserInfo.vue'
 
 export default {
   name: 'MyAssets',
   components: {
     Asset,
+    UserInfo
   },
   props: {
 
