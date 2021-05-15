@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body class= "h-100 box-shadow"  v-bind:img-src='require("@/assets/NFT/"+this.id+".jpg")' img-alt="Image" img-top>
+  <b-card no-body class= "h-100 box-shadow"  v-bind:img-src='require("@/assets/NFT/"+this.id+".png")' img-alt="Image" img-top>
     <b-card-body>
       <b-card-title>{{name}}</b-card-title>
       
@@ -73,11 +73,11 @@ export default {
   created: async function(){
     this.price =  await this.$contractService.getPrice(this.id);
     console.log("getPrice:",this.id, this.price )
-    this.power =  await this.$contractService.getPower(this.id);
+    this.power =  (await this.$contractService.getAssetPowerBatch([this.id]))[0];
     console.log("getPower:",this.id, this.power )
 
-    this.minedNfts = await this.$contractService.getMinedNft(this.id);
-    this.maxAmountNfts = await this.$contractService.getMaxAmountAllowedNft(this.id);
+    this.minedNfts = (await this.$contractService.getAssetCurrMintingBatch([this.id]))[0];
+    this.maxAmountNfts = (await this.$contractService.getAssetMaxMintingBatch([this.id]))[0];
 
   },
   methods: {

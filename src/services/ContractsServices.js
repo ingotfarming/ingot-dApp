@@ -7,6 +7,8 @@ import moment from 'moment'
 import Web3 from 'web3';
 import { BN } from "web3-utils";
 
+import Swal from 'sweetalert2'
+
 //let web3 = new Web3(new Web3.providers.HttpProvider(“http://localhost:9545"))
 //const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
 
@@ -40,41 +42,56 @@ class ContractsServices {
         this.storeContract = new web3.eth.Contract(Store.abi, STORE_ADDRESS);
       }
     async getPrice(id){
-        if(!Object.prototype.hasOwnProperty.call(this.prices,id)){
             const accounts = await web3.eth.getAccounts()
             var price = await this.storeContract.methods.priceNft(id).call({from: accounts[0]})
-            this.prices[id] = web3.utils.fromWei(price);
             Vue.$log.debug("getPrice ", price)
-        }
-        return this.prices[id];  
+        
+        return web3.utils.fromWei(price);  
      }
-    async getPower(id){
-        if(!Object.prototype.hasOwnProperty.call(this.powers,id)){
+    async getAssetPowerBatch(ids){
             const accounts = await web3.eth.getAccounts()
-            var power = (await this.famAssetContract.methods.assets(id).call({from: accounts[0]}))[2];
-            this.powers[id] = power;
+            var power = (await this.famAssetContract.methods.assetPowerBatch(ids).call({from: accounts[0]}));
             Vue.$log.debug("getPower ", power)
-        }
-        return this.powers[id];  
+        
+        return power;  
      }
-    async getMaxAmountAllowedNft(id){
+    async getAssetMaxMintingBatch(ids){
         const accounts = await web3.eth.getAccounts();
-        var maxAmount = await this.storeContract.methods.maxAmountAllowedNft(id).call({from: accounts[0]});
-        Vue.$log.debug("getMaxAmountAllowedNft ", id, maxAmount);
+        var maxAmount = await this.famAssetContract.methods.assetMaxMintingBatch(ids).call({from: accounts[0]});
+        Vue.$log.debug("getAssetMaxMintingBatch ", ids, maxAmount);
         return maxAmount;
     }
     async getFactorWeiToken(){
         const accounts = await web3.eth.getAccounts();
-        var value = await this.storeContract.methods.factorWeiToken().call({from: accounts[0]});
+        var value = await this.storeContract.methods.RATIO_WEI_TOKEN().call({from: accounts[0]});
         Vue.$log.debug("getFactorWeiToken ", value);
         return value; 
     }
-    async getMinedNft(id){
+    async getweiRaised(){
         const accounts = await web3.eth.getAccounts();
-        var mined = await this.storeContract.methods.minedNft(id).call({from: accounts[0]});
-        Vue.$log.debug("getMinedNft ", id, mined);
-        return mined;
+        var value = await this.storeContract.methods.weiRaised().call({from: accounts[0]});
+        Vue.$log.debug("getweiRaised ", value);
+        return value; 
     }
+    async getisPresale(){
+        const accounts = await web3.eth.getAccounts();
+        var value = await this.storeContract.methods.isPresale().call({from: accounts[0]});
+        Vue.$log.debug("getisPresale ", value);
+        return value; 
+    }
+    async getEthCap(){
+        const accounts = await web3.eth.getAccounts();
+        var value = await this.storeContract.methods.ETH_CAP().call({from: accounts[0]});
+        Vue.$log.debug("getEthCap ", value);
+        return value; 
+    }
+    async getAssetCurrMintingBatch(ids){
+        const accounts = await web3.eth.getAccounts();
+        var mineds = await this.famAssetContract.methods.assetCurrMintingBatch(ids).call({from: accounts[0]});
+        Vue.$log.debug("getAssetCurrMintingBatch ", ids, mineds);
+        return mineds;
+    }
+    
     getNFTs() {return this.NFTs}
     getAllPowerOfAssets(){
         return this.NFTs;
@@ -151,11 +168,11 @@ class ContractsServices {
         return response;
     }
 
-    async getStimateRewardPool() {
+    async getPendingReward() {
         //stimateReward(address addr) public view returns(uint256){
         const accounts = await web3.eth.getAccounts()
-        Vue.$log.debug("getStimateRewardPool ", accounts[0] )
-        var response = await this.poolContract.methods.stimateReward().call({from: accounts[0]})
+        Vue.$log.debug("getPendingReward ", accounts[0] )
+        var response = await this.poolContract.methods.pendingReward().call({from: accounts[0]})
         Vue.$log.debug(response)
         var balanceWei = web3.utils.fromWei(response)
         return balanceWei;
@@ -177,6 +194,14 @@ class ContractsServices {
         var response = await this.poolContract.methods.claim().send({from: accounts[0], gas:3000000})
         Vue.$log.debug(response)
         return response.status;
+    }
+
+    async getPoolShare() {
+        const accounts = await web3.eth.getAccounts()
+        Vue.$log.debug("getPoolShare ", accounts[0] )
+        var response = await this.poolContract.methods.rewardInfo().call({from: accounts[0]});
+        Vue.$log.debug(response)
+        return response[2];
     }
 
     async retrieveFromPool(idAssets, numAssets) {
@@ -334,55 +359,49 @@ class ContractsServices {
         return (accounts && accounts.length>0)?accounts[0]: undefined
     }
 
-    async connectAccount(){
-        Vue.$log.debug("connectAccount");
+    async loadWeb3(showAlert, askAccessMetamask){
+        Vue.$log.debug("loadWeb3, connecting Account...");
         if (window.ethereum) {
             try {
-              await window.ethereum.request({ method: 'eth_requestAccounts' });
+              if(askAccessMetamask) await window.ethereum.request({ method: 'eth_requestAccounts' });
               window.web3 = new Web3(window.ethereum);
-              web3 = window.web3;
-              this._initContracts();
+              //web3 = window.web3;
             } catch (error) {
-              // User denied account access...
-              console.log('User cancelled connect request. Error:', error);
+                // User denied account access...
+                if(showAlert){ await Swal.fire('Oops','Please, allow Metamask access to your account','error');}
+                console.log('User cancelled connect request. Error:', error);
             }
           } else if (window.web3) {
             try {
               window.web3 = new Web3(window.web3.currentProvider);
-              web3 = window.web3;
-              this._initContracts();
+              //web3 = window.web3;
             } catch (err) {
+              if(showAlert){ await Swal.fire('Oops','web3 error','error');}
               console.error('web3 error: ', err);
             }
           } else {
+            if(showAlert){ await Swal.fire('Oops','Non-Ethereum browser detected','error');}
             console.error('Non-Ethereum browser detected. Using Infura fallback.');
           }
+
+          if(window.web3){
+            var id = await window.web3.eth.net.getId();
+            console.log("NET ID: ", id);
+            if (id == process.env.VUE_APP_NETWORK_ID){
+                web3 = window.web3;
+            }else{
+                if(showAlert){ await Swal.fire('Oops','Wrong Network UNSUPPORTED network, change it first','error');}
+                console.error("Invalid Network",id);}
+          }
+ 
+          if(web3){
+            this._initContracts();
+            return true;
+          }
+          return false;
         }
 
-        loadWeb3(){
-            Vue.$log.debug("loadWeb3");
-
-            if (window.ethereum) {
-              try {
-                window.web3 = new Web3(window.ethereum);
-                web3 = window.web3;
-                this._initContracts();
-              } catch (err) {
-                console.error('ethereum error: ', err);
-              }
-            } else if (window.web3) {
-              try {
-                window.web3 = new Web3(window.web3.currentProvider);
-                web3 = window.web3;
-                this._initContracts();
-              } catch (err) {
-                console.error('web3 error: ', err);
-              }
-            } else {
-              console.error('Non-Ethereum browser detected. Using Infura fallback.');
-            }
-          }
-          async isConnected(){
+        async isConnected(){
             return ((await web3.eth.getAccounts()).length)>0
 
           }

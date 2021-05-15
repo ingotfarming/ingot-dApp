@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="md" type="dark" variant="dark" sticky class="bd-navbar py-3">
-    <b-container fluid>
+    <b-container >
     <b-navbar-brand href="#">FAM Asset</b-navbar-brand>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -16,8 +16,8 @@
 
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
-          <b-button class="my-2 my-sm-0" pill variant="success" v-if="isConnected" @click="connectToWallet()">Connected</b-button>
-          <b-button class="my-2 my-sm-0" pill variant="success" v-else>Connect Wallet</b-button>
+          <b-button class="connectBtn" v-if="isConnected">Connected</b-button>
+          <b-button class="connectBtn" v-else @click="connectToWallet()">Connect to a wallet</b-button>
       </b-navbar-nav>
     </b-collapse>
     </b-container>
@@ -41,12 +41,14 @@ export default {
     }
   },
   created: async function() {
+      await this.$contractService.loadWeb3(false, false);
       this.isConnected = await this.$contractService.isConnected();
   },
   computed:{ },
   methods: { 
     connectToWallet: async function(){
-      await this.$contractService.connectAccount();
+      let refresh = await this.$contractService.loadWeb3(true, true);
+      if (refresh) window.location.reload();
     }
   }
 }
@@ -56,5 +58,20 @@ export default {
 <style>
 .bd-navbar {
     box-shadow: 0 0.25rem 0.25rem rgb(0 0 0 / 25%), inset 0 -1px 5px rgb(0 0 0 / 25%);
+}
+.connectBtn{
+    border: 1px solid #f05d4d;
+    display: inline-block;
+    background: none;
+    color: #f05d4d !important;
+    border-radius: 20px;
+    padding: 6px 20px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+.connectBtn:hover {
+    background: #f05d4d;
+    color: #fff !important;
+    border: 1px solid #f05d4d;
 }
 </style>

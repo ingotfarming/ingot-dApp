@@ -13,11 +13,13 @@
       </div>
       <hr>
       <div>
-          <b-card-group deck >
-            <div class="col-md-4 mb-3" :key="asset.id" v-for="asset in assets">
+          <div>
+            <b-row>
+            <div class="col-md-3 px-2 mb-3" :key="asset.id" v-for="asset in assets">
               <Asset :asset="asset"  :id="asset.id" :numberAsset="asset.number" :casing="casing" @nAssetToTransfer="buildNumberAssetToTransfer"/>
-            </div>   
-          </b-card-group>
+            </div>
+             </b-row>
+          </div>
       </div>
     </b-container>
 

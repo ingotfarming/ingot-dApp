@@ -19,9 +19,14 @@
       <b-card bg-variant="white" text-variant="black" align="center" class="container-userinfo border-0">
         <b-card-text>
           <b-row align-v="center">
-            <b-col><h4>Power Pool:</h4></b-col>
+            <b-col><h4>Your Power:</h4></b-col>
             <b-col><h5>{{powerInPool}}</h5></b-col>
           </b-row>
+          <b-row align-v="center">
+            <b-col><h4>Power Pool:</h4></b-col>
+            <b-col><h5>{{powerTotal}}</h5></b-col>
+          </b-row>
+          
       </b-card-text>
       </b-card>
 
@@ -29,7 +34,7 @@
         <b-card-text>
           <b-row align-v="center">
             <b-col><h4>Pending Reward:</h4></b-col>
-            <b-col><h5>{{pendingReward}}</h5><button type="button" class="btn btn-sm btn-block btn-warning " @click="claim">Claim</button></b-col>
+            <b-col><h5>{{pendingReward}}</h5><button type="button" class="btn btn-sm btn-block btn-warning badge-pill" @click="claim">Claim</button></b-col>
           </b-row>
         </b-card-text>
       </b-card>
@@ -79,14 +84,16 @@ export default {
         nToken: 0,
         pendingReward: 0,
         powerInPool:0,
-        balanceETH : 0
+        balanceETH : 0,
+        powerTotal:0
     }
   },
   computed:{},
   created: async function(){
       this.nToken = Number((await this.$contractService.getBalanceOfFamToken())).toFixed(3);
-      this.pendingReward = Number((await this.$contractService.getStimateRewardPool())).toFixed(3);
+      this.pendingReward = Number((await this.$contractService.getPendingReward())).toFixed(3);
       this.powerInPool= await (this.$contractService.getUserInfo());
+      this.powerTotal = await(this.$contractService.getPoolShare());
       this.balanceETH = await this.$contractService.getBalanceETH()
 
   },
@@ -105,7 +112,7 @@ export default {
           this.$Swal.fire('Oops','Something went wrong!','error');
         }finally{
             this.nToken = Number((await this.$contractService.getBalanceOfFamToken())).toFixed(3);
-            this.pendingReward = Number((await this.$contractService.getStimateRewardPool())).toFixed(3);
+            this.pendingReward = Number((await this.$contractService.getPendingReward())).toFixed(3);
         }
       }
   }

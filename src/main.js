@@ -43,7 +43,7 @@ Vue.use(VueLogger, options);
 
 // api services
 Vue.prototype.$contractService =  new ContractsServices();
-Vue.prototype.$contractService.loadWeb3();
+// Vue.prototype.$contractService.loadWeb3();
 Vue.prototype.$Swal =  Swal;
 
 

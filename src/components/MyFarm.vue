@@ -1,25 +1,31 @@
 <template>
 <div>
     <b-jumbotron :header="header" :lead="lead" fluid=false class="py-4">
-      <hr class="my-4">
-        <p>Select Assets to transfer</p>
-          <b-button-group size="lg">
-            <b-button @click="chooseButton()">Choose Assets</b-button>
-            <b-button :disabled="!this.casing.buttonChoose" variant="success" @click="transferAsset()">Transfer Assets</b-button>
-          </b-button-group>
       </b-jumbotron>
       <UserInfo/>
-        <b-container class="my-4">
-              <b-row>
-              <b-card-group deck >
-                <div class="col-md-4" :key="asset.id" v-for="asset in assets">
-                <Asset :asset="asset"  :id="asset.id" :numberAsset="asset.number" :casing="casing" @nAssetToTransfer="buildNumberAssetToTransfer"/>
-            </div>   
-              </b-card-group>
-            </b-row>
+    <b-container class="container-asset my-4 p-3 px-5">
+      <div>
+        <h2 class="text-center">Select Assets to transfer</h2>
+        <div class = "text-center my-3">
+            <b-button size="lg" pill @click="chooseButton()" class="mr-2">Choose Assets</b-button>
+            <b-button size="lg" pill :disabled="!this.casing.buttonChoose" variant="success"  @click="transferAsset()">Transfer Assets</b-button>
+        </div>
+      </div>
+      <hr>
+      <div>
+          <div>
+            <b-row>
+            <div class="col-md-3 px-2 mb-3" :key="asset.id" v-for="asset in assets">
+              <Asset :asset="asset"  :id="asset.id" :numberAsset="asset.number" :casing="casing" @nAssetToTransfer="buildNumberAssetToTransfer"/>
+            </div>
+             </b-row>
+          </div>
+      </div>
     </b-container>
+
 </div>
 </template>
+
 
 <script>
 import Asset from './Asset.vue'
