@@ -40,14 +40,14 @@ const options = {
     showConsoleColors: true
 };
 Vue.use(VueLogger, options);
+Vue.prototype.$Swal =  Swal;
 
 // api services
 Vue.prototype.$contractService =  new ContractsServices();
-// Vue.prototype.$contractService.loadWeb3();
-Vue.prototype.$Swal =  Swal;
-
-
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')
+Vue.prototype.$contractService.loadWeb3(false, false).then(
+  () => {
+  new Vue({
+    router,
+    render: h => h(App)
+  }).$mount('#app');
+});

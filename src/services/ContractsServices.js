@@ -50,16 +50,16 @@ class ContractsServices {
      }
     async getAssetPowerBatch(ids){
             const accounts = await web3.eth.getAccounts()
-            var power = (await this.famAssetContract.methods.assetPowerBatch(ids).call({from: accounts[0]}));
-            Vue.$log.debug("getPower ", power)
+            var powers = (await this.famAssetContract.methods.assetPowerBatch(ids).call({from: accounts[0]}));
+            Vue.$log.debug("getPower ", powers)
         
-        return power;  
+        return powers.map(p=> Number(p));  
      }
     async getAssetMaxMintingBatch(ids){
         const accounts = await web3.eth.getAccounts();
         var maxAmount = await this.famAssetContract.methods.assetMaxMintingBatch(ids).call({from: accounts[0]});
         Vue.$log.debug("getAssetMaxMintingBatch ", ids, maxAmount);
-        return maxAmount;
+        return maxAmount.map(p=> Number(p));  
     }
     async getFactorWeiToken(){
         const accounts = await web3.eth.getAccounts();
@@ -89,7 +89,7 @@ class ContractsServices {
         const accounts = await web3.eth.getAccounts();
         var mineds = await this.famAssetContract.methods.assetCurrMintingBatch(ids).call({from: accounts[0]});
         Vue.$log.debug("getAssetCurrMintingBatch ", ids, mineds);
-        return mineds;
+        return mineds.map(p=> Number(p));  
     }
     
     getNFTs() {return this.NFTs}
@@ -128,7 +128,7 @@ class ContractsServices {
         for(let i=0;i<batch.length;i++){
             response.push({
                 id: i,
-                number: batch[i],
+                number: Number(batch[i]),
             })
         }
         return response;
@@ -162,7 +162,7 @@ class ContractsServices {
         for(let i=0;i<batch.length;i++){
             response.push({
                 id: i,
-                number: batch[i],
+                number: Number(batch[i]),
             })
         }
         return response;
@@ -218,7 +218,7 @@ class ContractsServices {
         const accounts = await web3.eth.getAccounts()
         for(let i=0; i<this.NFTs.length;i++){
             var price = await this.storeContract.methods.priceNft(this.NFTs[i].id).call({from: accounts[0]})
-            response[this.NFTs[i].id] = web3.utils.fromWei(price);
+            response[this.NFTs[i].id] = Number(web3.utils.fromWei(price));
         }
         Vue.$log.debug("getPriceFromStore ", response)
         return response   
@@ -385,8 +385,12 @@ class ContractsServices {
           }
 
           if(window.web3){
-            var id = await window.web3.eth.net.getId();
-            console.log("NET ID: ", id);
+            try {
+                var id = await window.web3.eth.net.getId();
+                console.log("NET ID: ", id);
+            } catch (err) {
+                console.error('web3 error: ', err);
+            }
             if (id == process.env.VUE_APP_NETWORK_ID){
                 web3 = window.web3;
             }else{

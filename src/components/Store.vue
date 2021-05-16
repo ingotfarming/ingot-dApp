@@ -1,6 +1,6 @@
 <template>
 <div>
-    <b-jumbotron :header="header" :lead="lead" fluid=false class="py-4"></b-jumbotron>
+    <b-jumbotron :header="header" :lead="lead" :fluid="true" class="py-4"></b-jumbotron>
     <UserInfo/>
     
     <b-container class="container-asset my-4 p-3 px-5">
@@ -10,13 +10,14 @@
             <b-button size="lg" pill @click="approveAsset()" class="mr-2">Approve</b-button>
             <b-button size="lg" pill :disabled="!this.casing.buttonChoose" variant="success"  @click="transferAsset()">Buy</b-button>
         </div>
+        <h6 class="text-center">Total Price: {{totalPrice}}</h6>
       </div>
       <hr>
       <div>
           <div>
             <b-row>
-            <div class="col-md-3 px-2 mb-3" :key="asset.id" v-for="asset in assets">
-              <Asset :asset="asset"  :id="asset.id" :numberAsset="asset.number" :casing="casing" @nAssetToTransfer="buildNumberAssetToTransfer"/>
+            <div class="col-md-3 px-2 mb-3" :key="index" v-for="(asset, index) in assets">
+              <Asset :id="asset.id" :number="asset.number" :power="powers[index]" :maxAllowed="maxAllowed[index]"  :mined="mined[index]"  :price="prices[index]" :casing="casing"  @nAssetToTransfer="buildNumberAssetToTransfer"/>
             </div>
              </b-row>
           </div>
@@ -45,6 +46,10 @@ export default {
         lead: "Here you can find your assets NFT1155 in staking",
         header:"Store",
         assets : [],
+        powers : [],
+        maxAllowed : [],
+        mined : [],
+        prices : [],
         casing: {
           type:"STORE",
           buttonChoose:false},
@@ -60,6 +65,11 @@ export default {
   methods: {
     initAsset: async function(){
         this.assets = await this.$contractService.getNFTs()
+        this.powers = (await this.$contractService.getAssetPowerBatch(this.assets.map(asset => asset.id)));
+        this.maxAllowed = (await this.$contractService.getAssetMaxMintingBatch(this.assets.map(asset => asset.id)));
+        this.mined = (await this.$contractService.getAssetCurrMintingBatch(this.assets.map(asset => asset.id)));
+        this.prices = (await this.$contractService.getPriceFromStore(this.assets.map(asset => asset.id)));
+
     },
     transferAsset: async function(){
     try{
@@ -84,12 +94,12 @@ export default {
     },
 
   buildNumberAssetToTransfer: function(id, num, price){
-    if(num>0){
-    console.log(id, num, price)
+    this.$log.debug(id, num, price);
+
     this.nAssetToUser[id] = num
     this.priceForId[id] = price
     this.updateTotalPrice();
-    }
+    
 
   },
   updateTotalPrice: function(){

@@ -1,7 +1,7 @@
 <template>
   <b-navbar toggleable="md" type="dark" variant="dark" sticky class="bd-navbar py-3">
     <b-container >
-    <b-navbar-brand href="#">FAM Asset</b-navbar-brand>
+    <b-navbar-brand href="#">Gem Mining</b-navbar-brand>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav >
@@ -41,7 +41,7 @@ export default {
     }
   },
   created: async function() {
-      await this.$contractService.loadWeb3(false, false);
+      //await this.$contractService.loadWeb3(false, false);
       this.isConnected = await this.$contractService.isConnected();
   },
   computed:{ },

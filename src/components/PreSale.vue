@@ -1,6 +1,6 @@
 <template>
 <div>
-  <b-jumbotron :header="header" :lead="lead" fluid=false class="py-4"></b-jumbotron>   
+  <b-jumbotron :header="header" :lead="lead" :fluid="true" class="py-4"></b-jumbotron>   
 
     <b-container class="my-5">
       <b-card no-body class="container-userinfo card-swap mx-auto">

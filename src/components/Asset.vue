@@ -12,7 +12,7 @@
         <div v-if="casing.type === 'MY_ASSETS' || casing.type === 'MY_POOL' ">
         <h5 class="d-flex justify-content-between align-items-center mb-3">
           <span class="text-muted">Your Asset</span>
-          <span class="badge badge-secondary badge-pill">{{numberAsset}}</span>
+          <span class="badge badge-secondary badge-pill">{{number}}</span>
         </h5>
       </div>
           
@@ -24,8 +24,8 @@
           <span class="badge badge-secondary badge-pill">{{price}}</span>
         </h5>
         <h5 class="d-flex justify-content-between align-items-center">
-          <span class="text-muted">Remaining</span>
-          <span class="badge badge-secondary badge-pill">{{minedNfts}}/{{maxAmountNfts}}</span>
+          <span class="text-muted">Mined</span>
+          <span class="badge badge-secondary badge-pill">{{mined}}/{{maxAllowed}}</span>
         </h5>
         </div>
     </b-card-body>
@@ -36,7 +36,7 @@
       <h5 class="d-flex  justify-content-between align-items-center">
         <span class="text-muted" v-if="casing.type === 'MY_ASSETS' || casing.type === 'MY_POOL'">Transfer</span>
         <span class="text-muted" v-if="casing.type === 'STORE'">Buy</span>
-        <b-form-spinbutton id="sb-inline" v-model="numberAssetSelected" inline min="0" max="100" @input="$emit('nAssetToTransfer', id, numberAssetSelected, price)"></b-form-spinbutton>
+        <b-form-spinbutton id="sb-inline" v-model="numberSelected" inline min="0" max="100" @input="$emit('nAssetToTransfer', id, numberSelected, price)"></b-form-spinbutton>
       </h5>
       </b-card-footer>
     </div>
@@ -48,36 +48,38 @@
 export default {
   name: 'Asset',
   props: {
-    asset: Object,
+    //asset: Object,
     id: Number,
-    numberAsset: Number,
-    casing: Object
+    number : { type: Number, default: 0 },
+    power : { type: Number, default: 0 },
+    price : { type: Number, default: 0 },
+    mined : { type: Number, default: 0 },
+    maxAllowed : { type: Number, default: 0 },
+    casing: Object,
+
   },
   data: function() {
     return {
+      
       //id: this.asset.id,
-      //numberAsset: this.asset.number,
+      //number: this.asset.number,
       name : this.$contractService.getNFTs()[this.id].name,
       text : this.$contractService.getNFTs()[this.id].text,
-      power: this.$contractService.getNFTs()[this.id].power,
-      price: this.$contractService.getNFTs()[this.id].price,
-      minedNfts : 0,
-      maxAmountNfts: 0,
-
-      numberAssetSelected:0,
+      numberSelected:0,
 
     }
   },
   computed:{
   },
   created: async function(){
-    this.price =  await this.$contractService.getPrice(this.id);
-    console.log("getPrice:",this.id, this.price )
-    this.power =  (await this.$contractService.getAssetPowerBatch([this.id]))[0];
-    console.log("getPower:",this.id, this.power )
+    this.$log.debug("TYPE ASSETS: ", this.casing.type);
+    // this.price =  await this.$contractService.getPrice(this.id);
+    //console.log("getPrice:",this.id, this.price )
+    // this.power =  (await this.$contractService.getAssetPowerBatch([this.id]))[0];
+    //console.log("getPower:",this.id, this.power )
 
-    this.minedNfts = (await this.$contractService.getAssetCurrMintingBatch([this.id]))[0];
-    this.maxAmountNfts = (await this.$contractService.getAssetMaxMintingBatch([this.id]))[0];
+    //this.mined = (await this.$contractService.getAssetCurrMintingBatch([this.id]))[0];
+    //this.maxAllowed = (await this.$contractService.getAssetMaxMintingBatch([this.id]))[0];
 
   },
   methods: {

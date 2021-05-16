@@ -16,20 +16,7 @@ export default {
   components: {
     Header,
     Footer
-  },
-  props: {
-    msg: String
-  },
-  data: function() {
-    return {
-
-    }
-  },
-  computed:{},
-  created:{
-
-  },
-  methods: {}
+  }
 }
 
 </script>

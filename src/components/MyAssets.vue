@@ -1,23 +1,19 @@
 <template>
 <div>
-    <b-jumbotron :header="header" :lead="lead" fluid=true class="py-4">
+    <b-jumbotron :header="header" :lead="lead" :fluid="true" class="py-4">
       </b-jumbotron>
         <UserInfo/>
 
      <b-container class="container-asset my-4 p-3 px-5">
       <div>
-        <h2 class="text-center">Select Assets to transfer</h2>
-        <div class = "text-center my-3">
-            <b-button size="lg" pill @click="chooseButton()" class="mr-2">Choose Assets</b-button>
-            <b-button size="lg" pill :disabled="!this.casing.buttonChoose" variant="success"  @click="transferAsset()">Transfer Assets</b-button>
-        </div>
+        <h2 class="text-center">My Assets</h2>
       </div>
       <hr>
       <div>
           <div>
             <b-row>
-            <div class="col-md-3 px-2 mb-3" :key="asset.id" v-for="asset in assets">
-              <Asset :asset="asset"  :id="asset.id" :numberAsset="asset.number" :casing="casing" @nAssetToTransfer="buildNumberAssetToTransfer"/>
+            <div class="col-md-3 px-2 mb-3" :key="index" v-for="(asset, index) in assets">
+              <Asset :id="asset.id" :number="asset.number" :power="powers[index]" :casing="casing" />
             </div>
              </b-row>
           </div>
@@ -45,14 +41,12 @@ export default {
         lead: "Here you can find your personal assets NFT1155",
         header:"My Assets",
 
-        nToken: 0,
-        pendingReward: 0,
         assets : [],
+        powers : [],
         casing: {
           type:"MY_ASSETS",
           buttonChoose:false
         },
-        nAssetToPool:{}
     }
   },
   computed:{},
@@ -62,31 +56,11 @@ export default {
   methods: {
     initAsset: async function(){
       this.assets = (await this.$contractService.getBalanceOfFamAsset()).filter(function(asset) { return asset.number != 0});
-    },
-    chooseButton: function(){
-      this.casing.buttonChoose = !this.casing.buttonChoose
-      console.log(this.casing.buttonChoose)
-    },
-    transferAsset: async function(){
-        try{
-          let result = await this.$contractService.transferAssetToPool(Object.keys(this.nAssetToPool),Object.values(this.nAssetToPool));
-          this.$log.debug(result)
-          if(result){
-            this.$Swal.fire('Good job!','You clicked the button!','success');
-          }else{
-          this.$Swal.fire('Oops','Something went wrong!','error');
-          }
-        }catch(message){
-          this.$log.error(message);
-          this.$Swal.fire('Oops','Something went wrong!','error');
-        }finally{
-            this.initAsset();
-        }
-  },
-  buildNumberAssetToTransfer: function(id, num){
-    console.log(id, num)
-    this.nAssetToPool[id] = num
-  }
+      this.powers = (await this.$contractService.getAssetPowerBatch(this.assets.map(asset => asset.id)));
+      console.log(this.powers)
+      
+
+    }
   }
 }
 </script>
