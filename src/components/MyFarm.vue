@@ -1,6 +1,6 @@
 <template>
 <div>
-    <b-jumbotron :header="header" :lead="lead" :fluid="true" class="py-4">
+    <b-jumbotron :header="header" :lead="lead" :fluid="true" class="py-4 jumbotron-style">
       </b-jumbotron>
       <UserInfo/>
     <b-container class="container-asset my-4 p-3 px-5">
@@ -66,6 +66,7 @@ export default {
   },
   methods: {
     initAsset: async function(){
+      await this.$contractServicePromise;
       this.assets = (await this.$contractService.getAssetInPool()).filter(function(asset) { return asset.number != 0});
       this.powers = (await this.$contractService.getAssetPowerBatch(this.assets.map(asset => asset.id)));
     },

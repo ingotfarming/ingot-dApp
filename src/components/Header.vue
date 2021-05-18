@@ -1,14 +1,20 @@
 <template>
   <b-navbar toggleable="md" type="dark" variant="dark" sticky class="bd-navbar py-3">
     <b-container >
-    <b-navbar-brand href="#">Gem Mining</b-navbar-brand>
+      <b-navbar-brand href="#">
+
+        <img :src='require("@/assets/logoGem.svg")' class="" height="45">
+        <span class="brand-text">Gem Farming</span>
+      </b-navbar-brand>
+
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav >
       <b-navbar-nav>
         <b-nav-item>Home</b-nav-item>
         <b-nav-item to="/App/MyAssets">My Assets</b-nav-item>
-        <b-nav-item to="/App/MyFarm">My Farm</b-nav-item>
+        <b-nav-item to="/App/MyFarm">Farming</b-nav-item>
+        <b-nav-item to="#">Uniswap LP</b-nav-item>
         <b-nav-item to="/App/Store">Store</b-nav-item>
         <b-nav-item to="/App/PreSale">PreSale</b-nav-item>
         <b-nav-item>Guide</b-nav-item>
@@ -16,7 +22,7 @@
 
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
-          <b-button class="connectBtn" v-if="isConnected">Connected</b-button>
+          <b-button class="connectBtn" v-if="isConnected">{{getSubStringAddress()}}</b-button>
           <b-button class="connectBtn" v-else @click="connectToWallet()">Connect to a wallet</b-button>
       </b-navbar-nav>
     </b-collapse>
@@ -37,18 +43,26 @@ export default {
   },
   data: function() {
     return {
-      isConnected:false
+      isConnected:false,
+      accountAddress: ""
     }
   },
   created: async function() {
-      //await this.$contractService.loadWeb3(false, false);
+      await this.$contractServicePromise;
       this.isConnected = await this.$contractService.isConnected();
+      this.accountAddress = await this.$contractService.getLoggedAccount();
+      this.$log.debug(this.accountAddress);
   },
   computed:{ },
   methods: { 
     connectToWallet: async function(){
       let refresh = await this.$contractService.loadWeb3(true, true);
       if (refresh) window.location.reload();
+    },
+    getSubStringAddress: function(){
+      if(this.isConnected && this.accountAddress!=="")
+        return this.accountAddress.substring(0,4) + "..." + this.accountAddress.substring(this.accountAddress.length - 4, this.accountAddress.length)
+      else return "";
     }
   }
 }
@@ -74,4 +88,10 @@ export default {
     color: #fff !important;
     border: 1px solid #f05d4d;
 }
+.brand-text{
+
+    margin-left: 10px;
+    text-decoration: none;
+}
+
 </style>

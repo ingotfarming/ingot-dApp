@@ -56,6 +56,7 @@ export default {
   },
   methods: {
     initAsset: async function(){
+      await this.$contractServicePromise;
       this.assets = (await this.$contractService.getBalanceOfFamAsset()).filter(function(asset) { return asset.number != 0});
       this.powers = (await this.$contractService.getAssetPowerBatch(this.assets.map(asset => asset.id)));
     },

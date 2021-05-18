@@ -349,11 +349,7 @@ class ContractsServices {
         }
     }
 
-    getLoggedAccount = async function() {
-        const web3 = await Web3()        
-        if (!web3) {
-            return undefined
-        }
+    async getLoggedAccount() {
         const accounts = await web3.eth.getAccounts()
 
         return (accounts && accounts.length>0)?accounts[0]: undefined

@@ -1,6 +1,6 @@
 <template>
 <div>
-    <b-jumbotron :header="header" :lead="lead" :fluid="true" class="py-4"></b-jumbotron>
+    <b-jumbotron :header="header" :lead="lead" :fluid="true" class="py-4 jumbotron-style"></b-jumbotron>
     <UserInfo/>
     
     <b-container class="container-asset my-4 p-3 px-5">
@@ -65,6 +65,7 @@ export default {
   methods: {
     initAsset: async function(){
         this.assets = await this.$contractService.getNFTs()
+        await this.$contractServicePromise;
         this.powers = (await this.$contractService.getAssetPowerBatch(this.assets.map(asset => asset.id)));
         this.maxAllowed = (await this.$contractService.getAssetMaxMintingBatch(this.assets.map(asset => asset.id)));
         this.mined = (await this.$contractService.getAssetCurrMintingBatch(this.assets.map(asset => asset.id)));

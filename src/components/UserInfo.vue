@@ -90,6 +90,7 @@ export default {
   },
   computed:{},
   created: async function(){
+      await this.$contractServicePromise;
       this.nToken = Number((await this.$contractService.getBalanceOfFamToken())).toFixed(3);
       this.pendingReward = Number((await this.$contractService.getPendingReward())).toFixed(3);
       this.powerInPool= await (this.$contractService.getUserInfo());

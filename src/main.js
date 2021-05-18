@@ -44,10 +44,9 @@ Vue.prototype.$Swal =  Swal;
 
 // api services
 Vue.prototype.$contractService =  new ContractsServices();
-Vue.prototype.$contractService.loadWeb3(false, false).then(
-  () => {
-  new Vue({
-    router,
-    render: h => h(App)
-  }).$mount('#app');
-});
+Vue.prototype.$contractServicePromise = Vue.prototype.$contractService.loadWeb3(false, false);
+
+new Vue({
+  router,
+  render: h => h(App)
+}).$mount('#app');

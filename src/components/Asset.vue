@@ -36,7 +36,7 @@
       <h5 class="d-flex  justify-content-between align-items-center">
         <span class="text-muted" v-if="casing.type === 'MY_ASSETS' || casing.type === 'MY_POOL'">Transfer</span>
         <span class="text-muted" v-if="casing.type === 'STORE'">Buy</span>
-        <b-form-spinbutton id="sb-inline" v-model="numberSelected" inline min="0" max="100" @input="$emit('nAssetToTransfer', id, numberSelected, price)"></b-form-spinbutton>
+        <b-form-spinbutton id="sb-inline" v-model="numberSelected" inline min=0 :max="maxElementsAllowed()" @input="$emit('nAssetToTransfer', id, numberSelected, price)"></b-form-spinbutton>
       </h5>
       </b-card-footer>
     </div>
@@ -83,11 +83,21 @@ export default {
 
   },
   methods: {
+    maxElementsAllowed(){
+      if(this.casing.type === 'STORE'){
+        return this.maxAllowed-this.mined;
+      }
+      return this.number;
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.rounded-circle {
+    border-radius: 50%!important;
+}
 
 </style>
