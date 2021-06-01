@@ -1,38 +1,87 @@
 [
     {
       "id":0,
-      "power":1,
-      "price":0,
-      "name": "Bufalo",
-      "text":""    
+      "power":10,
+      "price":100,
+      "name": "Gold",
+      "maxAllowed": 7000
     },
     {
       "id":1,
-      "power":10,
-      "price":0,
-      "name": "Zappatrice",
-      "text":""    
+      "power":14,
+      "price":130,
+      "name": "Iron",
+      "maxAllowed": 5425
     },
     {
       "id":2,
-      "power":9,
-      "price":0,
-      "name": "Farm",
-      "text":""    
+      "power":19,
+      "price":169,
+      "name": "Tin",
+      "maxAllowed": 4204
     },
     {
       "id":3,
-      "power":9,
-      "price":0,
-      "name": "Coccoli",
-      "text":""    
+      "power":26,
+      "price":220,
+      "name": "Steel",
+      "maxAllowed": 3258
     },
     {
       "id":4,
-      "power":9,
-      "price":0,
-      "name": "Trattore con Rimorchi3",
-      "text":""    
-  }
+      "power":35,
+      "price":285,
+      "name": "Brass",
+      "maxAllowed": 2525
+  },
+  {
+    "id":5,
+    "power":47,
+    "price":371,
+    "name": "Copper",
+    "maxAllowed": 1957
+  },
+  {
+    "id":6,
+    "power":65,
+    "price":483,
+    "name": "Carbon",
+    "maxAllowed": 1516
+  },
+  {
+    "id":7,
+    "power":87,
+    "price":627,
+    "name": "Silver",
+    "maxAllowed": 1175
+  },
+  {
+    "id":8,
+    "power":118,
+    "price":816,
+    "name": "Titanium",
+    "maxAllowed": 910
+  },
+  {
+    "id":9,
+    "power":160,
+    "price":1060,
+    "name": "Cobalt",
+    "maxAllowed": 706
+  },
+{
+  "id":10,
+  "power":215,
+  "price":1378,
+  "name": "Platinum",
+  "maxAllowed": 547
+},
+{
+  "id":11,
+  "power":290,
+  "price":1792,
+  "name": "Bronze",
+  "maxAllowed": 424
+}
 
   ]

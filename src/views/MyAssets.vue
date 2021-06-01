@@ -2,21 +2,18 @@
 <div>
     <b-jumbotron :header="header" :lead="lead" :fluid="true" class="py-4 jumbotron-style">
       </b-jumbotron>
-        <UserInfo/>
+        <UserInfo :balanceWidget="true"/>
 
-     <b-container class="container-asset my-4 p-3 px-5">
-      <div>
-        <h2 class="text-center">My Assets</h2>
+    <b-container class="container-asset my-4">
+      <div class = "card-header-asset ">
+        <h2 class="text-center">My Ingots</h2>
       </div>
-      <hr>
-      <div>
-          <div>
+      <div class= "card-body-asset">
             <b-row>
             <div class="col-md-3 px-2 mb-3" :key="index" v-for="(asset, index) in assets">
               <Asset :id="asset.id" :number="asset.number" :power="powers[index]" :casing="casing" />
             </div>
              </b-row>
-          </div>
       </div>
     </b-container>
 
@@ -24,7 +21,7 @@
 </template>
 <script>
 
-import Asset from './Asset.vue'
+import Asset from '@/components/Asset.vue'
 import UserInfo from '@/components/UserInfo.vue'
 
 export default {
@@ -38,8 +35,8 @@ export default {
   },
   data: function() {
     return {
-        lead: "Here you can find your personal assets NFT1155",
-        header:"My Assets",
+        lead: "Here you find your personal assets ingots",
+        header:"My Ingots",
 
         assets : [],
         powers : [],
@@ -56,9 +53,9 @@ export default {
   methods: {
     initAsset: async function(){
       await this.$contractServicePromise;
-      this.assets = (await this.$contractService.getBalanceOfFamAsset()).filter(function(asset) { return asset.number != 0});
+      this.assets = (await this.$contractService.getBalanceOfINGOTAsset()).filter(function(asset) { return asset.number != 0});
       this.powers = (await this.$contractService.getAssetPowerBatch(this.assets.map(asset => asset.id)));
-      console.log(this.powers)
+      this.$log.debug(this.powers)
       
 
     }

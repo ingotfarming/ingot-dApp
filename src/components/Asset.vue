@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body class= "h-100 box-shadow"  v-bind:img-src='require("@/assets/NFT/"+this.id+".png")' img-alt="Image" img-top>
+  <b-card no-body class= "h-100 box-shadow border-0"  v-bind:img-src='require("@/assets/NFT/"+this.id+".png")' img-alt="Image" img-top>
     <b-card-body>
       <b-card-title>{{name}}</b-card-title>
       
@@ -32,10 +32,11 @@
   
     <!-- MY_ASSETS-->  <!-- MY_POOL-->  <!-- STORE-->
     <div v-if=" (casing.type === 'STORE') || ((casing.type === 'MY_ASSETS' || casing.type === 'MY_POOL') && casing.buttonChoose===true)">
-      <b-card-footer>
+      <b-card-footer class="border-0">
       <h5 class="d-flex  justify-content-between align-items-center">
         <span class="text-muted" v-if="casing.type === 'MY_ASSETS' || casing.type === 'MY_POOL'">Transfer</span>
         <span class="text-muted" v-if="casing.type === 'STORE'">Buy</span>
+        
         <b-form-spinbutton id="sb-inline" v-model="numberSelected" inline min=0 :max="maxElementsAllowed()" @input="$emit('nAssetToTransfer', id, numberSelected, price)"></b-form-spinbutton>
       </h5>
       </b-card-footer>
@@ -60,27 +61,21 @@ export default {
   },
   data: function() {
     return {
-      
-      //id: this.asset.id,
-      //number: this.asset.number,
       name : this.$contractService.getNFTs()[this.id].name,
-      text : this.$contractService.getNFTs()[this.id].text,
-      numberSelected:0,
-
+      numberSelected: 0
     }
   },
   computed:{
   },
   created: async function(){
     this.$log.debug("TYPE ASSETS: ", this.casing.type);
-    // this.price =  await this.$contractService.getPrice(this.id);
-    //console.log("getPrice:",this.id, this.price )
-    // this.power =  (await this.$contractService.getAssetPowerBatch([this.id]))[0];
-    //console.log("getPower:",this.id, this.power )
 
-    //this.mined = (await this.$contractService.getAssetCurrMintingBatch([this.id]))[0];
-    //this.maxAllowed = (await this.$contractService.getAssetMaxMintingBatch([this.id]))[0];
-
+    if(this.power === 0){
+      await this.$contractServicePromise;
+      this.power = this.$contractService.getNFTs()[this.id].power;
+      this.price = this.$contractService.getNFTs()[this.id].price;
+      this.maxAllowed = this.$contractService.getNFTs()[this.id].maxAllowed;
+    }
   },
   methods: {
     maxElementsAllowed(){
@@ -89,7 +84,15 @@ export default {
       }
       return this.number;
     }
-  }
+  },
+    watch: {
+      mined: function () {
+        this.numberSelected = 0;
+      },
+      number: function () {
+        this.numberSelected = 0;
+      }
+    }
 }
 </script>
 

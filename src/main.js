@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import App from './App.vue'
 import VueLogger from 'vuejs-logger';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -11,6 +10,9 @@ import {  } from '@fortawesome/free-regular-svg-icons'
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+// Import App after Bootstrap to override css
+import App from './App.vue'
 import router from './router'
 
 import Swal from 'sweetalert2'
@@ -41,6 +43,10 @@ const options = {
 };
 Vue.use(VueLogger, options);
 Vue.prototype.$Swal =  Swal;
+
+// configure EventBus
+const EventBus = new Vue();
+export default EventBus;
 
 // api services
 Vue.prototype.$contractService =  new ContractsServices();

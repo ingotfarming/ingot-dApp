@@ -1,11 +1,12 @@
 <template>
 <div>
   <b-jumbotron :header="header" :lead="lead" :fluid="true" class="py-4 jumbotron-style"></b-jumbotron>   
+      <UserInfo  :balanceWidget="true" />
 
     <b-container class="my-5">
       <b-card no-body class="container-userinfo card-swap mx-auto border-0" >
         <b-card-header class="border-0">
-          <div class="sc-jSFjdj sc-gKAaRy kJmatq eqGhLO"><div class="sc-jSFjdj sc-gKAaRy kJmatq iIdAKa"><h2 color="body" scale="lg" class="sc-gtsrHT sc-bCwfaz krsPTE KsMbG">Buy Token</h2><div color="textSubtle" class="sc-gtsrHT grfoLI">Buy Token from ETH</div></div><div height="64" class="sc-iwajpm icJUJX"><img :src='require("@/assets/logoGem.svg")' alt="Gem" class="sc-cxNHIi fHUQtx" height="64"></div></div>
+          <div class="sc-jSFjdj sc-gKAaRy kJmatq eqGhLO"><div class="sc-jSFjdj sc-gKAaRy kJmatq iIdAKa"><h2 color="body" scale="lg" class="sc-gtsrHT sc-bCwfaz krsPTE KsMbG">Buy Token</h2><div color="textSubtle" class="sc-gtsrHT grfoLI">Buy Token from ETH</div></div><div height="64" class="sc-iwajpm icJUJX"><img :src='require("@/assets/logoIngot.svg")' alt="INGOT" class="sc-cxNHIi fHUQtx" height="64"></div></div>
         </b-card-header>
         <b-card-body >
           
@@ -56,11 +57,11 @@
             </div>
          </div>
          <div class="sc-gYhigD hMrKZs">
-            <input class="sc-ksXhwv jSLqHT token-amount-input" inputmode="decimal" title="Token Amount" autocomplete="off" autocorrect="off" type="text" pattern="^[0-9]*[.,]?[0-9]*$" placeholder="0.0" minlength="1" maxlength="79" spellcheck="false" :value=tokens>
+            <input class="sc-ksXhwv jSLqHT token-amount-input" readonly inputmode="decimal" title="Token Amount" autocomplete="off" autocorrect="off" type="text" pattern="^[0-9]*[.,]?[0-9]*$" placeholder="0.0" minlength="1" maxlength="79" spellcheck="false" :value=tokens>
             <button class="sc-bGqQkm ebCXba open-currency-select-button">
                <span class="sc-fXvjs endHJt">
-                  <img class="sc-bUrJUP fvDLME" width=24px alt="GEM" :src='require("@/assets/logoGem.svg")' style="margin-right: 8px;">
-                  <div id="pair" color="text" class="sc-gsTCUz hJWxft">GEM</div>
+                  <img class="sc-bUrJUP fvDLME" width=24px alt="INGOT" :src='require("@/assets/logoIngot.svg")' style="margin-right: 8px;">
+                  <div id="pair" color="text" class="sc-gsTCUz hJWxft">INGOT</div>
                </span>
             </button>
          </div>
@@ -69,9 +70,9 @@
    <div class="sc-irlOZD fvZHbs">
       <div class="sc-dWdcrH Armuo">
          <div class="sc-jGVbCA sc-fXoxut sc-Fyfyc cBDHvY fnVNkv fTMjUf">
-            <div font-size="14px" color="text" class="sc-gsTCUz iZoLXo">Price</div>
+            <div font-size="14px" color="text" class="sc-gsTCUz iZoLXo">Price: </div>
             <div font-size="14px" color="text" class="sc-gsTCUz iZoLXo" style="justify-content: center; align-items: center; display: flex;">
-               {{conversion}} GEM per 1 ETH
+               {{conversion}} INGOT per 1 ETH
             </div>
          </div>
       </div>
@@ -79,12 +80,15 @@
     <div class="sc-irlOZD fvZHbs">
       <div class="sc-dWdcrH Armuo">
          <div class="sc-jGVbCA sc-fXoxut sc-Fyfyc cBDHvY fnVNkv fTMjUf">
-            <div font-size="14px" color="text" class="sc-gsTCUz iZoLXo">ETH Aviable: {{fromWei(weiAviable)}} ETH</div>
+            <div font-size="14px" color="text" class="sc-gsTCUz iZoLXo">ETH Aviable: </div>
+            <div font-size="14px" color="text" class="sc-gsTCUz iZoLXo" style="justify-content: center; align-items: center; display: flex;">
+               {{fromWei(weiAviable)}} ETH
+            </div>
          </div>
       </div>
    </div>
 </div>
-<div class="sc-iuAqxS kanDXL"><b-button  @click="buyTokens(ETHforBuy)" class="sc-dlfnbm hWXYpz" width="100%" scale="md">Buy</b-button ></div>
+<div class="sc-iuAqxS kanDXL"><button @click="buyTokens(ETHforBuy)" :disabled="buttonBuyDisabled" class="hWXYpz" width="100%" scale="md">Buy</button ></div>
 
         </b-card-body>
       </b-card>
@@ -97,23 +101,27 @@
 import web3 from 'web3';
 import { BN } from "web3-utils";
 
+import UserInfo from '@/components/UserInfo.vue'
+import EventBus from '@/main.js'
 
 export default {
   name: 'Store',
   components: {
+      UserInfo
   },
   props: {
 
   },
   data: function() {
     return {
-        lead: "Here you can buy the tokens in pre sale",
+        lead: "Here you can buy the Ingot Token at Pre Sale stage",
         header:"Pre Sale",
         ETHforBuy : 0,
         tokens : 0,
         conversion: 0,
         weiAviable: new BN(0),
-        saleIsOpen : false    
+        saleIsOpen : false,
+        buttonBuyDisabled: true
     }
   },
   computed:{},
@@ -122,7 +130,6 @@ export default {
     this.saleIsOpen = await this.$contractService.getisPresale();
     this.conversion = await this.$contractService.getFactorWeiToken();
     this.weiAviable = (new BN(await this.$contractService.getEthCap())).sub( new BN(await this.$contractService.getweiRaised()));
-
   },
   methods: {
   buyTokens: async function(amounts){
@@ -130,7 +137,10 @@ export default {
       let result = await this.$contractService.buyTokens(amounts);
       this.$log.debug(result)
       if(result){
-        this.$Swal.fire('Good job!','You clicked the button!','success');
+        this.$Swal.fire('Good job!','Transaction success','success');
+        this.ETHforBuy = '0';
+        this.convEthToToken(this.ETHforBuy)
+        EventBus.$emit('bus-tokens-changed');
       }else{
       this.$Swal.fire('Oops','Something went wrong!','error');
       }
@@ -141,8 +151,22 @@ export default {
    
   },
   convEthToToken: function(amounts){
-   this.tokens = amounts * this.conversion;
-    this.$log.debug(amounts, this.tokens)
+      try{
+        var weiAmount = new BN(web3.utils.toWei(String(amounts)));
+        this.tokens = web3.utils.fromWei(weiAmount.mul(new BN(this.conversion)));
+        this.$log.debug(amounts, this.tokens)
+        if(weiAmount.lte(this.weiAviable) && weiAmount.gt(new BN(0)) && this.saleIsOpen){
+            this.$log.debug("amounts <=aviable");
+            this.buttonBuyDisabled = false;
+        }else{
+            this.$log.debug("amounts > aviable");
+            this.buttonBuyDisabled = true;
+        }
+      }catch(e){
+        this.$log.debug(e);
+        this.buttonBuyDisabled = true;
+      }
+        
   },
   fromWei: function(wei){
     return  web3.utils.fromWei(wei).toString();
@@ -172,6 +196,7 @@ export default {
     margin-top: 1rem;
 }
 
+/* Start Header */
 .card-header {
 background: linear-gradient(
 111.68deg
@@ -188,6 +213,7 @@ background: linear-gradient(
     justify-content: space-between;
     color: rgb(118, 69, 217);
 }
+
 .KsMbG {
     font-size: 24px;
     font-weight: 600;
@@ -227,7 +253,7 @@ background: linear-gradient(
     -webkit-box-pack: justify;
     justify-content: space-between;
 }
-
+/* end Header */
 
 .fvBiDf {
     display: grid;
@@ -259,6 +285,7 @@ background: linear-gradient(
     outline: 0px;
     transition: background-color 0.2s ease 0s, opacity 0.2s ease 0s;
     height: 32px;
+    width: 32px;
     background-color: rgb(239, 244, 245);
     box-shadow: none;
     color: rgb(31, 199, 212);
@@ -402,10 +429,25 @@ background: linear-gradient(
     color: white;
     width: 100%;
 }
-.hWXYpz:hover {
+.hWXYpz:hover:enabled {
     opacity: 0.65;
+}
+.hWXYpz:disabled {
+    background-color: rgb(233, 234, 235);
+    border-color: rgb(233, 234, 235);
+    box-shadow: none;
+    color: rgb(189, 194, 196);
+    cursor: not-allowed;
 }
 .gkONdE {
     padding: 2px;
+}
+
+.hWXYpz:active{
+    opacity: 0.85;
+    transform: translateY(1px);
+    box-shadow: none;
+    background-color: rgb(31, 199, 212) !important;
+
 }
 </style>

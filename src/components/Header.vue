@@ -3,21 +3,19 @@
     <b-container >
       <b-navbar-brand href="#">
 
-        <img :src='require("@/assets/logoGem.svg")' class="" height="45">
-        <span class="brand-text">Gem Farming</span>
+        <img :src='require("@/assets/logoIngot.svg")' class="" height="45">
+        <span class="brand-text">Ingot Farming</span>
       </b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav >
       <b-navbar-nav>
-        <b-nav-item>Home</b-nav-item>
-        <b-nav-item to="/App/MyAssets">My Assets</b-nav-item>
-        <b-nav-item to="/App/MyFarm">Farming</b-nav-item>
-        <b-nav-item to="#">Uniswap LP</b-nav-item>
-        <b-nav-item to="/App/Store">Store</b-nav-item>
-        <b-nav-item to="/App/PreSale">PreSale</b-nav-item>
-        <b-nav-item>Guide</b-nav-item>
+        <b-nav-item to="/MyIngots">My Ingots</b-nav-item>
+        <b-nav-item to="/Farming">Farming</b-nav-item>
+        <b-nav-item to="/Store">Store</b-nav-item>
+        <b-nav-item to="/PreSale">PreSale</b-nav-item>
+        <b-nav-item href="https://gemfarming.gitbook.io/" target="_blank" rel="noopener noreferrer" >Guide</b-nav-item>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->

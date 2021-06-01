@@ -1,35 +1,30 @@
 <template>
-  <b-modal id="my-assets-transfer" size="xl" title="MyAssets" hide-footer hide-header>
+  <b-modal id="my-assets-transfer" size="xl" title="MyAssets" hide-footer hide-header content-class="container-asset" body-class="py-0 px-0">
 
-<div>
-     <b-container class="container-asset p-3 px-5">
-      <div>
-        <h2 class="text-center">Select Assets to Retrieve</h2>
+      <div class = "card-header-asset ">
+        <h2 class="text-center">Select Ingots to transfer into the farming</h2>
         <div class = "text-center my-3">
         </div>
       </div>
-      <hr>
-      <div>
-          <div>
+      <div class= "card-body-asset">
             <b-row>
             <div class="col-md-3 px-2 mb-3" :key="index" v-for="(asset, index) in assets">
               <Asset :id="asset.id" :number="asset.number" :power="powers[index]" :casing="casing" @nAssetToTransfer="buildNumberAssetToTransfer"/>
             </div>
              </b-row>
-          </div>
       </div>
-    </b-container>
-</div>
-        <div class = "text-center my-3">
+        <div class = "text-center pb-5">
             <b-button size="lg" pill @click="hideModal" class="mr-2">Cancel</b-button>
             <b-button size="lg" pill :disabled="!this.casing.buttonChoose" variant="success"  @click="transferAsset">Confirm</b-button>
         </div>
+
          
 </b-modal>
 </template>
 <script>
 
 import Asset from '@/components/Asset.vue'
+import EventBus from '@/main.js'
 
 export default {
   name: 'MyAssetsTransferModal',
@@ -57,7 +52,7 @@ export default {
   methods: {
     initAsset: async function(){
       await this.$contractServicePromise;
-      this.assets = (await this.$contractService.getBalanceOfFamAsset()).filter(function(asset) { return asset.number != 0});
+      this.assets = (await this.$contractService.getBalanceOfINGOTAsset()).filter(function(asset) { return asset.number != 0});
       this.powers = (await this.$contractService.getAssetPowerBatch(this.assets.map(asset => asset.id)));
     },
     chooseButton: function(){
@@ -69,15 +64,16 @@ export default {
           let result = await this.$contractService.transferAssetToPool(Object.keys(this.nAssetToTransfer),Object.values(this.nAssetToTransfer));
           this.$log.debug(result)
           if(result){
-            this.$Swal.fire('Good job!','You clicked the button!','success');
+            this.$Swal.fire('Good job!','Transaction success','success');
+            this.initAsset();
+            this.$emit("transfer-modal-changed");
+            EventBus.$emit('bus-powers-changed');
           }else{
           this.$Swal.fire('Oops','Something went wrong!','error');
           }
         }catch(message){
           this.$log.error(message);
           this.$Swal.fire('Oops','Something went wrong!','error');
-        }finally{
-            this.initAsset();
         }
     },
     buildNumberAssetToTransfer: function(id, num){

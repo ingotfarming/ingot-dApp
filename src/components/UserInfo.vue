@@ -2,82 +2,80 @@
 
 <b-container class= "">
   <div>
-    <b-card-group deck>
+      <b-row class="d-flex justify-content-center align-items-center">
+        <b-col md="4" v-if="balanceWidget">
       <b-card bg-variant="white" text-variant="black" align="center" class="container-userinfo border-0">
           <b-card-text>
             <b-row align-v="center">
-              <b-col><h4>Balance:</h4></b-col>
-              <b-col><h5>{{nToken}}</h5></b-col>
+              <b-col><h5>Balance:</h5></b-col>
+              <b-col class="d-flex justify-content-center "><h5 class="align-self-center mb-0">{{nToken}}</h5><img :src='require("@/assets/logoIngot.svg")' class="pl-1" height="30" alt="INGOT"></b-col>
             </b-row>
             <b-row align-v="center">
-              <b-col><h4>ETH:</h4></b-col>
-              <b-col><h5>{{balanceETH}}</h5></b-col>
+              <b-col><h5>Buy Ingot:</h5></b-col>
+              <b-col><a target="_blank" rel="noopener noreferrer" href="https://app.uniswap.org/#/swap" class="btn btn-sm btn-block  badge-pill button-uniswap" role="button">Uniswap</a></b-col>
+            
             </b-row>
           </b-card-text>
+            
       </b-card>
+</b-col>
 
+        <b-col md="4" v-if="poolPowerWidget">
       <b-card bg-variant="white" text-variant="black" align="center" class="container-userinfo border-0">
         <b-card-text>
           <b-row align-v="center">
-            <b-col><h4>Your Power:</h4></b-col>
+            <b-col md="8"><h5>Your Power:</h5></b-col>
             <b-col><h5>{{powerInPool}}</h5></b-col>
           </b-row>
           <b-row align-v="center">
-            <b-col><h4>Power Pool:</h4></b-col>
+            <b-col md="8"><h5>Power Pool:</h5></b-col>
             <b-col><h5>{{powerTotal}}</h5></b-col>
+          </b-row>
+          <b-row align-v="center">
+            <b-col md="8"><h5>Reward for Block:</h5></b-col>
+            <b-col class="d-flex justify-content-center"><h5 class="align-self-center mb-0">{{rewardForBlockFarm}}</h5><img :src='require("@/assets/logoIngot.svg")' class="pl-1" height="30" alt="INGOT"></b-col>
           </b-row>
           
       </b-card-text>
       </b-card>
-
+    </b-col>
+     
+     <b-col md="4" v-if="rewardWidget">
       <b-card bg-variant="white" text-variant="black" align="center" class="container-userinfo border-0">
         <b-card-text>
           <b-row align-v="center">
-            <b-col><h4>Pending Reward:</h4></b-col>
-            <b-col><h5>{{pendingReward}}</h5><button type="button" class="btn btn-sm btn-block btn-warning badge-pill" @click="claim">Claim</button></b-col>
+            <b-col><h5>Pending Reward:</h5></b-col>
+            <b-col class="d-flex justify-content-center"><h5 class="align-self-center mb-0">{{pendingReward}}</h5><img :src='require("@/assets/logoIngot.svg")' class="pl-1" height="30" alt="INGOT"></b-col>
+          </b-row>
+          <b-row> 
+            <b-col><button type="button" class="btn btn-sm btn-block btn-warning badge-pill button-claim" @click="claim">Claim</button></b-col>
           </b-row>
         </b-card-text>
       </b-card>
-    </b-card-group>
+      </b-col>
+      
+
+
+      </b-row>
   </div>
   </b-container>
-
-<!--<b-col><div class="icon icon-shape text-white rounded-circle shadow bg-green"><font-awesome-icon icon="coins" size="lg" /> </div></b-col><-->
-<!--
-    <div class="container">
-      <div class="card-deck mb-3 text-center">
-        <div class="card mb-3 box-shadow">
-          <div class="card-header">
-            <h4 class="my-0 font-weight-normal">User Info</h4>
-          </div>
-          <div class="card-body">
-            <h4 class="card-title pricing-card-title">Token Balance: {{nToken}} <small class="text-muted"></small></h4>
-              <h4 class="card-title pricing-card-title">Power In Pool: {{powerInPool}} <small class="text-muted"></small></h4>
-          </div>
-        </div>
-        <div class="card mb-3 box-shadow">
-          <div class="card-header">
-            <h4 class="my-0 font-weight-normal">Pending Reward</h4>
-          </div>
-          <div class="card-body">
-            <h4 class="card-title pricing-card-title">{{pendingReward}}<small class="text-muted"></small></h4>
-            <button type="button" class="btn btn-lg btn-block btn-warning" @click="claim" >Claim</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    -->
 </template>
 
 <script>
-
+import EventBus from '@/main.js'
+import web3 from 'web3';
 
 export default {
   name: 'UserInfo',
   components: {
   },
   props: {
-    msg: String
+    balanceWidget : { type: Boolean, default: false },
+    poolPowerWidget : { type: Boolean, default: false },
+    rewardWidget : { type: Boolean, default: false },
+    uniswapSwapWidget : { type: Boolean, default: true },
+
+
   },
   data: function() {
     return {
@@ -85,26 +83,39 @@ export default {
         pendingReward: 0,
         powerInPool:0,
         balanceETH : 0,
-        powerTotal:0
+        powerTotal:0,
+        rewardForBlockFarm:0
     }
   },
   computed:{},
   created: async function(){
       await this.$contractServicePromise;
-      this.nToken = Number((await this.$contractService.getBalanceOfFamToken())).toFixed(3);
-      this.pendingReward = Number((await this.$contractService.getPendingReward())).toFixed(3);
+      this.nToken = Number((await this.$contractService.getBalanceOfINGOTToken())).toFixed(3);
+      this.pendingReward = Number((await this.$contractService.getPendingReward())).toFixed(3); //check when is 0
       this.powerInPool= await (this.$contractService.getUserInfo());
       this.powerTotal = await(this.$contractService.getPoolShare());
-      this.balanceETH = await this.$contractService.getBalanceETH()
+      this.rewardForBlockFarm = web3.utils.fromWei(await(this.$contractService.getRewardForBlockFarm()));
+
+      //this.balanceETH = await this.$contractService.getBalanceETH();
+
+      EventBus.$on('bus-tokens-changed', async () => {
+        this.nToken = Number((await this.$contractService.getBalanceOfINGOTToken())).toFixed(3);
+      });
+      EventBus.$on('bus-powers-changed', async () => {
+        this.powerInPool= await (this.$contractService.getUserInfo());
+        this.powerTotal = await(this.$contractService.getPoolShare());
+      });
+
 
   },
   methods: {
       claim: async function(){
         try{
           let result = await this.$contractService.claimFromPool();
-          this.$log.debug("claim", result)
+          this.$log.debug("claim", result);
           if(result){
-            this.$Swal.fire('Good job!','You clicked the button!','success');
+            this.$Swal.fire('Good job!','Transaction success','success');
+            EventBus.$emit('bus-tokens-changed');
           }else{
           this.$Swal.fire('Oops','Something went wrong!','error');
           }
@@ -112,7 +123,7 @@ export default {
           this.$log.error(message);
           this.$Swal.fire('Oops','Something went wrong!','error');
         }finally{
-            this.nToken = Number((await this.$contractService.getBalanceOfFamToken())).toFixed(3);
+            this.nToken = Number((await this.$contractService.getBalanceOfINGOTToken())).toFixed(3);
             this.pendingReward = Number((await this.$contractService.getPendingReward())).toFixed(3);
         }
       }
@@ -122,5 +133,31 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+h4{
+  margin-bottom: 0px;
+}
+.button-uniswap{
+    background: linear-gradient(128.17deg, #BD00FF -14.78%, #FF1F8A 110.05%);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    background-color: rgb(1, 1, 1);
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    display: inline-block;
+    font-weight: 600;
+    transition: transform 0.45s cubic-bezier(0.19, 1, 0.22, 1) 0s;
+}
+.button-uniswap:hover {
+    background: #BD00FF;
+}
+.button-uniswap:active, .button-claim:active{
+    opacity: 0.85;
+    transform: translateY(1px);
+    box-shadow: none;
+}
+.container-userinfo {
+    box-shadow: 0 8px 28px -6px rgb(62 25 18 / 10%), 0 16px 60px -12px rgb(62 25 18 / 8%);
+    border-radius: 36px;
+    background: rgb(255, 255, 255);
+}
 </style>
