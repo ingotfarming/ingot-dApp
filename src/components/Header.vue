@@ -15,7 +15,7 @@
         <b-nav-item to="/Farming">Farming</b-nav-item>
         <b-nav-item to="/Store">Store</b-nav-item>
         <b-nav-item to="/PreSale">PreSale</b-nav-item>
-        <b-nav-item href="https://gemfarming.gitbook.io/" target="_blank" rel="noopener noreferrer" >Guide</b-nav-item>
+        <b-nav-item href="https://ingotfarming.gitbook.io" target="_blank" rel="noopener noreferrer" >Guide</b-nav-item>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
