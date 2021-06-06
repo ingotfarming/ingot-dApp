@@ -38,10 +38,14 @@ const routes = [
 */
 
 const router = new VueRouter({
+  scrollBehavior() {
+    return { x: 0, y: 0 };
+  },
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
   linkExactActiveClass: "active"
 })
+
 
 export default router

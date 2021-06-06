@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     initAsset: async function(){
-        this.assets = await this.$contractService.getNFTs()
+        this.assets = await this.$contractService.getNFTs();
         await this.$contractServicePromise;
         this.powers = (await this.$contractService.getAssetPowerBatch(this.assets.map(asset => asset.id)));
         this.maxAllowed = (await this.$contractService.getAssetMaxMintingBatch(this.assets.map(asset => asset.id)));

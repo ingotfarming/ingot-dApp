@@ -3,10 +3,10 @@
     <b-card-body>
       <b-card-title>{{name}}</b-card-title>
       
-      <b-card-text>{{text}}</b-card-text>
+      <!--b-card-text>{{text}}</b-card-text-->
       <h5 class="d-flex justify-content-between align-items-center mb-3" >
         <span class="text-muted" >Power</span>
-        <b-badge pill variant="warning">{{power}}</b-badge>
+        <b-badge pill variant="warning">{{defaultPower}}</b-badge>
       </h5>
 
         <div v-if="casing.type === 'MY_ASSETS' || casing.type === 'MY_POOL' ">
@@ -21,11 +21,11 @@
       <div v-if="casing.type === 'STORE'">
         <h5 class="d-flex justify-content-between align-items-center mb-3">
           <span class="text-muted">Price</span>
-          <span class="badge badge-secondary badge-pill">{{price}}</span>
+          <span class="badge badge-secondary badge-pill">{{defaultPrice}}</span>
         </h5>
         <h5 class="d-flex justify-content-between align-items-center">
           <span class="text-muted">Mined</span>
-          <span class="badge badge-secondary badge-pill">{{mined}}/{{maxAllowed}}</span>
+          <span class="badge badge-secondary badge-pill">{{mined}}/{{defaultMaxAllowed}}</span>
         </h5>
         </div>
     </b-card-body>
@@ -46,36 +46,42 @@
 </template>
 
 <script>
+import {NFT} from '@/assets'
 export default {
   name: 'Asset',
   props: {
     //asset: Object,
-    id: Number,
+    id: { type: Number, default: 0 },
     number : { type: Number, default: 0 },
-    power : { type: Number, default: 0 },
-    price : { type: Number, default: 0 },
+    power : { type: Number, default: 0},
+    price : { type: Number, default: 0},
     mined : { type: Number, default: 0 },
-    maxAllowed : { type: Number, default: 0 },
+    maxAllowed : { type: Number, default:0 },
     casing: Object,
 
   },
   data: function() {
     return {
-      name : this.$contractService.getNFTs()[this.id].name,
+      name : NFT[this.id].name,
       numberSelected: 0
     }
   },
   computed:{
+      defaultPower () {
+        if(this.power === 0) return NFT[this.id].power;
+        return this.power;
+      },
+      defaultPrice () {
+        if(this.power === 0) return NFT[this.id].price;
+        return this.price;
+      },
+      defaultMaxAllowed () {
+        if(this.power === 0) return NFT[this.id].maxAllowed;
+        return this.maxAllowed;
+      }
   },
   created: async function(){
     this.$log.debug("TYPE ASSETS: ", this.casing.type);
-
-    if(this.power === 0){
-      await this.$contractServicePromise;
-      this.power = this.$contractService.getNFTs()[this.id].power;
-      this.price = this.$contractService.getNFTs()[this.id].price;
-      this.maxAllowed = this.$contractService.getNFTs()[this.id].maxAllowed;
-    }
   },
   methods: {
     maxElementsAllowed(){

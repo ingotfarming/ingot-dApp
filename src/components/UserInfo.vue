@@ -90,7 +90,7 @@ export default {
   computed:{},
   created: async function(){
       await this.$contractServicePromise;
-      this.nToken = Number((await this.$contractService.getBalanceOfINGOTToken())).toFixed(3);
+      this.nToken = Number((await this.$contractService.getBalanceOfIngotToken())).toFixed(3);
       this.pendingReward = Number((await this.$contractService.getPendingReward())).toFixed(3); //check when is 0
       this.powerInPool= await (this.$contractService.getUserInfo());
       this.powerTotal = await(this.$contractService.getPoolShare());
@@ -99,7 +99,7 @@ export default {
       //this.balanceETH = await this.$contractService.getBalanceETH();
 
       EventBus.$on('bus-tokens-changed', async () => {
-        this.nToken = Number((await this.$contractService.getBalanceOfINGOTToken())).toFixed(3);
+        this.nToken = Number((await this.$contractService.getBalanceOfIngotToken())).toFixed(3);
       });
       EventBus.$on('bus-powers-changed', async () => {
         this.powerInPool= await (this.$contractService.getUserInfo());
@@ -123,7 +123,7 @@ export default {
           this.$log.error(message);
           this.$Swal.fire('Oops','Something went wrong!','error');
         }finally{
-            this.nToken = Number((await this.$contractService.getBalanceOfINGOTToken())).toFixed(3);
+            this.nToken = Number((await this.$contractService.getBalanceOfIngotToken())).toFixed(3);
             this.pendingReward = Number((await this.$contractService.getPendingReward())).toFixed(3);
         }
       }
