@@ -11,7 +11,7 @@
               <b-col class="d-flex justify-content-center "><h5 class="align-self-center mb-0">{{nToken}}</h5><img :src='require("@/assets/logoIngot.svg")' class="pl-1" height="30" alt="INGOT"></b-col>
             </b-row>
             <b-row align-v="center">
-              <b-col><h5>Buy Ingot:</h5></b-col>
+              <b-col><h5>Buy INGOT:</h5></b-col>
               <b-col><a target="_blank" rel="noopener noreferrer" href="https://app.uniswap.org/#/swap" class="btn btn-sm btn-block  badge-pill button-uniswap" role="button">Uniswap</a></b-col>
             
             </b-row>
@@ -24,11 +24,11 @@
       <b-card bg-variant="white" text-variant="black" align="center" class="container-userinfo border-0">
         <b-card-text>
           <b-row align-v="center">
-            <b-col md="8"><h5>Your Power:</h5></b-col>
+            <b-col md="8"><h5>Your Value:</h5></b-col>
             <b-col><h5>{{powerInPool}}</h5></b-col>
           </b-row>
           <b-row align-v="center">
-            <b-col md="8"><h5>Power Pool:</h5></b-col>
+            <b-col md="8"><h5>Value Pool:</h5></b-col>
             <b-col><h5>{{powerTotal}}</h5></b-col>
           </b-row>
           <b-row align-v="center">

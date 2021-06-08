@@ -5,7 +5,7 @@
       
       <!--b-card-text>{{text}}</b-card-text-->
       <h5 class="d-flex justify-content-between align-items-center mb-3" >
-        <span class="text-muted" >Power</span>
+        <span class="text-muted" >Value</span>
         <b-badge pill variant="warning">{{defaultPower}}</b-badge>
       </h5>
 

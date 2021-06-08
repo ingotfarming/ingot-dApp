@@ -6,13 +6,14 @@
         <div class = "text-center my-3">
         </div>
       </div>
-      <div class= "card-body-asset">
-            <b-row>
-            <div class="col-md-3 px-2 mb-3" :key="index" v-for="(asset, index) in assets">
-              <Asset :id="asset.id" :number="asset.number" :power="powers[index]" :casing="casing" @nAssetToTransfer="buildNumberAssetToTransfer"/>
-            </div>
-             </b-row>
+      <div v-if="assets.length > 0" class= "card-body-asset">
+        <b-row>
+          <div class="col-md-3 px-2 mb-3" :key="index" v-for="(asset, index) in assets">
+            <Asset :id="asset.id" :number="asset.number" :power="powers[index]" :casing="casing" @nAssetToTransfer="buildNumberAssetToTransfer"/>
+          </div>
+        </b-row>
       </div>
+      <h5 v-else class="text-center py-3 "> You don't have Ingots</h5>
       <div class = "text-center pb-5">
           <b-button size="lg" pill @click="hideModal" class="mr-2">Cancel</b-button>
           <b-button size="lg" pill :disabled="!this.casing.buttonChoose" variant="success"  @click="transferAsset">Confirm</b-button>
