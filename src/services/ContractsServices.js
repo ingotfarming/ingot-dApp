@@ -16,6 +16,7 @@ const INGOT_TOKEN_ADDRESS = process.env.VUE_APP_INGOT_TOKEN_ADDRESS;
 const INGOT_NFT_ADDRESS= process.env.VUE_APP_INGOT_NFT_ADDRESS;
 const INGOT_FARM_ADDRESS= process.env.VUE_APP_INGOT_FARM_ADDRESS;
 const STORE_ADDRESS= process.env.VUE_APP_STORE_ADDRESS;
+const CONTRACT_IS_DEPLOYED = (process.env.VUE_APP_CONTRACT_DEPLOYED === 'true');
 
 const NUM_ASSET_TYPES = NFT.length;
 
@@ -35,6 +36,7 @@ class ContractsServices {
       }
 
     _initContracts(){
+        if(!CONTRACT_IS_DEPLOYED) return;
         Vue.$log.debug("initContracts");
         this.IngotTokenContract = new web3.eth.Contract(IngotToken.abi, INGOT_TOKEN_ADDRESS);
         this.IngotNFTContract = new web3.eth.Contract(IngotNFT.abi, INGOT_NFT_ADDRESS);
@@ -410,7 +412,7 @@ class ContractsServices {
             if (id == process.env.VUE_APP_NETWORK_ID){
                 web3 = window.web3;
             }else{
-                if(showAlert){ await Swal.fire('Oops','Wrong Network UNSUPPORTED network, change it first','error');}
+                if(showAlert){ await Swal.fire('Oops','Wrong Network, change it first','error');}
                 console.error("Invalid Network",id);}
           }
  

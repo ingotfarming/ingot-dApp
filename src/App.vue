@@ -15,6 +15,16 @@ export default {
   components: {
     Header,
     Footer
+  },
+  created: function(){
+    if(process.env.VUE_APP_CONTRACT_DEPLOYED === 'false'){
+      this.$Swal.fire('Warning','Contract is still not deployed!','warning');
+    }
+  },
+  updated: function(){
+    if(process.env.VUE_APP_CONTRACT_DEPLOYED === 'false'){
+      this.$Swal.fire('Warning','Contract is still not deployed!','warning');
+    }
   }
 }
 
