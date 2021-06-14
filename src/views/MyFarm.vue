@@ -54,7 +54,7 @@ export default {
   },
   data: function() {
     return {
-        lead: "Here you can farming your personal ingots",
+        lead: "Here you can farm your personal ingots",
         header:"Farming",
         
         powers : [],

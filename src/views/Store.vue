@@ -96,6 +96,7 @@ export default {
 
     approveAsset: async function() {
       try{
+        this.makeToast("Info","Waiting confirm for Approve before press Buy button")
         let result = await this.$contractService.approveTransferToStore(this.totalPrice);
         this.$log.debug(result)
         if(result){
@@ -129,6 +130,16 @@ export default {
     this.$log.debug(amounts)
     this.$contractService.buyTokens(amounts);
 
+  },
+
+  makeToast(title, message) {
+        this.$bvToast.toast(message, {
+          title: title,
+          variant: "primary",
+          toaster: "b-toaster-bottom-right",
+          solid: true,
+          autoHideDelay: 10000
+        })
   }
 
   }

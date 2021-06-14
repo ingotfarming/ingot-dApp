@@ -18,14 +18,16 @@ export default {
   },
   created: function(){
     if(process.env.VUE_APP_CONTRACT_DEPLOYED === 'false'){
-      this.$Swal.fire('Warning','Contract is still not deployed!','warning');
+      this.$Swal.fire('Warning','Contract is still not deployed!<br>Waiting for launch','warning');
     }
   },
+  /*
   updated: function(){
     if(process.env.VUE_APP_CONTRACT_DEPLOYED === 'false'){
       this.$Swal.fire('Warning','Contract is still not deployed!','warning');
     }
   }
+  */
 }
 
 </script>

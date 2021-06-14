@@ -33,7 +33,7 @@
           </b-row>
           <b-row align-v="center">
             <b-col md="8"><h5>Reward for Block:</h5></b-col>
-            <b-col class="d-flex justify-content-center"><h5 class="align-self-center mb-0">{{rewardForBlockFarm}}</h5><img :src='require("@/assets/logoIngot.svg")' class="pl-1" height="30" alt="INGOT"></b-col>
+            <b-col class="d-flex justify-content-center"><h5 class="align-self-center mb-0">{{rewardForBlockFarm}}</h5><!--img :src='require("@/assets/logoIngot.svg")' class="pl-1" height="30" alt="INGOT"--></b-col>
           </b-row>
           
       </b-card-text>

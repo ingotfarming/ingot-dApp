@@ -60,7 +60,9 @@ export default {
   font-size: 13px;
   color: #fff;
 }
-
+.copyright{
+  color: black;
+}
 .blog-footer .social-links a {
   font-size: 25px;
   display: inline-block;
