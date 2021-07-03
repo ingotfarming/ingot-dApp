@@ -9,14 +9,17 @@ npm install
 ```
 npm run serve-dev
 npm run serve-pre
-npm run serve-prod
+npm run serve-eth
+npm run serve-bsc
+
 ```
 
 ### Compiles and minifies for production
 ```
 npm run build-dev
 npm run build-pre
-npm run build-prod
+npm run build-eth
+npm run build-bsc
 ```
 
 ### Lints and fixes files

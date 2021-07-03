@@ -412,7 +412,7 @@ class ContractsServices {
             if (id == process.env.VUE_APP_NETWORK_ID){
                 web3 = window.web3;
             }else{
-                if(showAlert){ await Swal.fire('Oops','Wrong Network, change it first','error');}
+                if(showAlert){ await Swal.fire('Oops','Wrong Network, change it first to connect to '+process.env.VUE_APP_NETWORK_NAME,'error');}
                 console.error("Invalid Network",id);}
           }
  

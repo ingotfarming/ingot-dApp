@@ -12,7 +12,7 @@
             </b-row>
             <b-row align-v="center">
               <b-col><h5>Buy INGOT:</h5></b-col>
-              <b-col><a target="_blank" rel="noopener noreferrer" href="https://app.uniswap.org/#/swap" class="btn btn-sm btn-block  badge-pill button-uniswap" role="button">Uniswap</a></b-col>
+              <b-col><a target="_blank" rel="noopener noreferrer" :href="linkExchange" class="btn btn-sm btn-block  badge-pill button-uniswap" role="button">{{nameExchange}}</a></b-col>
             
             </b-row>
           </b-card-text>
@@ -87,7 +87,15 @@ export default {
         rewardForBlockFarm:0
     }
   },
-  computed:{},
+  computed:{
+      nameExchange: function () {
+        return process.env.VUE_APP_EXCHANGE_NAME;
+      },
+      linkExchange: function () {
+        return process.env.VUE_APP_EXCHANGE_LINK;
+      }
+
+  },
   created: async function(){
       await this.$contractServicePromise;
       this.nToken = Number((await this.$contractService.getBalanceOfIngotToken())).toFixed(3);
@@ -134,6 +142,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h4{
+  margin-bottom: 0px;
+}
+h5{
   margin-bottom: 0px;
 }
 .button-uniswap{

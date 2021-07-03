@@ -14,14 +14,13 @@
         <b-nav-item to="/MyIngots">My Ingots</b-nav-item>
         <b-nav-item to="/Farming">Farming</b-nav-item>
         <b-nav-item to="/Store">Store</b-nav-item>
-        <b-nav-item to="/PreSale">PreSale</b-nav-item>
+        <b-nav-item :href="linkPreSale" target="_blank" rel="noopener noreferrer" >PreSale</b-nav-item>
         <b-nav-item href="https://ingotfarming.gitbook.io" target="_blank" rel="noopener noreferrer" >Guide</b-nav-item>
       </b-navbar-nav>
-
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
           <b-button class="connectBtn" v-if="isConnected">{{getSubStringAddress()}}</b-button>
-          <b-button class="connectBtn" v-else @click="connectToWallet()">Connect to a wallet</b-button>
+          <b-button class="connectBtn" v-else @click="connectToWallet()">Connect to {{nameNetwork}}</b-button>
       </b-navbar-nav>
     </b-collapse>
     </b-container>
@@ -51,7 +50,16 @@ export default {
       this.accountAddress = await this.$contractService.getLoggedAccount();
       this.$log.debug(this.accountAddress);
   },
-  computed:{ },
+  computed:{
+      nameNetwork: function () {
+        return process.env.VUE_APP_NETWORK_NAME;
+      },
+      linkPreSale: function () {
+        return process.env.VUE_APP_PRESALE_LINK;
+      }
+
+      
+  },
   methods: { 
     connectToWallet: async function(){
       let refresh = await this.$contractService.loadWeb3(true, true);
