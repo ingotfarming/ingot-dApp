@@ -1,4 +1,4 @@
-import { IngotToken, IngotNFT, IngotFarm, Store, NFT } from '../assets'
+import { IngotToken, IngotNFT, IngotFarm, Store, PrivateSale, NFT } from '../assets'
 import Vue from 'vue'
 
 //import web3 from './web3Providers'
@@ -16,6 +16,8 @@ const INGOT_TOKEN_ADDRESS = process.env.VUE_APP_INGOT_TOKEN_ADDRESS;
 const INGOT_NFT_ADDRESS= process.env.VUE_APP_INGOT_NFT_ADDRESS;
 const INGOT_FARM_ADDRESS= process.env.VUE_APP_INGOT_FARM_ADDRESS;
 const STORE_ADDRESS= process.env.VUE_APP_STORE_ADDRESS;
+const PRIVATE_SALE_ADDRESS= process.env.VUE_APP_PRIVATE_SALE_ADDRESS;
+
 const CONTRACT_IS_DEPLOYED = (process.env.VUE_APP_CONTRACT_DEPLOYED === 'true');
 
 const NUM_ASSET_TYPES = NFT.length;
@@ -33,6 +35,7 @@ class ContractsServices {
         this.IngotNFTContract = null;
         this.IngotFarmContract = null;
         this.storeContract = null;
+        this.privateSaleContract = null;
       }
 
     _initContracts(){
@@ -42,6 +45,8 @@ class ContractsServices {
         this.IngotNFTContract = new web3.eth.Contract(IngotNFT.abi, INGOT_NFT_ADDRESS);
         this.IngotFarmContract = new web3.eth.Contract(IngotFarm.abi, INGOT_FARM_ADDRESS);
         this.storeContract = new web3.eth.Contract(Store.abi, STORE_ADDRESS);
+        this.privateSaleContract = new web3.eth.Contract(PrivateSale.abi, PRIVATE_SALE_ADDRESS);
+
       }
     async getPrice(id){
             const accounts = await web3.eth.getAccounts()
@@ -63,34 +68,60 @@ class ContractsServices {
         Vue.$log.debug("getAssetMaxMintingBatch ", ids, maxAmount);
         return maxAmount.map(p=> Number(p));  
     }
+    // privateSaleContract
+    async buyTokens(etherAmount){
+        const accounts = await web3.eth.getAccounts()
+        let amountsWei = web3.utils.toWei(etherAmount)
+        let response = await this.privateSaleContract.methods.buyTokens().send({from: accounts[0],value: amountsWei})
+        return response.status
+    }
     async getFactorWeiToken(){
         const accounts = await web3.eth.getAccounts();
-        var value = await this.storeContract.methods.RATIO_WEI_TOKEN().call({from: accounts[0]});
+        var value = await this.privateSaleContract.methods.RATIO_WEI_TOKEN().call({from: accounts[0]});
         Vue.$log.debug("getFactorWeiToken ", value);
         return value; 
     }
     async getweiRaised(){
         const accounts = await web3.eth.getAccounts();
-        var value = await this.storeContract.methods.weiRaised().call({from: accounts[0]});
+        var value = await this.privateSaleContract.methods.weiRaised().call({from: accounts[0]});
         Vue.$log.debug("getweiRaised ", value);
         return value; 
     }
-    async getisPresale(){
+    async getisPrivateSale(){
         const accounts = await web3.eth.getAccounts();
-        var value = await this.storeContract.methods.isPresale().call({from: accounts[0]});
+        var value = await this.privateSaleContract.methods.isPrivateSale().call({from: accounts[0]});
         Vue.$log.debug("getisPresale ", value);
-        return value; 
-    }
-    async getisStoreOpen(){
-        const accounts = await web3.eth.getAccounts();
-        var value = await this.storeContract.methods.isStoreOpen().call({from: accounts[0]});
-        Vue.$log.debug("getisStoreOpen ", value);
         return value; 
     }
     async getEthCap(){
         const accounts = await web3.eth.getAccounts();
-        var value = await this.storeContract.methods.ETH_CAP().call({from: accounts[0]});
+        var value = await this.privateSaleContract.methods.ETH_CAP().call({from: accounts[0]});
         Vue.$log.debug("getEthCap ", value);
+        return value; 
+    }
+    async getEthCapUser(){
+        const accounts = await web3.eth.getAccounts();
+        var value = await this.privateSaleContract.methods.MAX_ETH_USER().call({from: accounts[0]});
+        Vue.$log.debug("getEthCapUser ", value);
+        return value; 
+    }
+    async getMinEthUser(){
+        const accounts = await web3.eth.getAccounts();
+        var value = await this.privateSaleContract.methods.MIN_ETH_USER().call({from: accounts[0]});
+        Vue.$log.debug("getMinEthUser ", value);
+        return value; 
+    }
+    async getEthCapUserCurrent(){
+        const accounts = await web3.eth.getAccounts();
+        var value = await this.privateSaleContract.methods.users(accounts[0]).call({from: accounts[0]});
+        Vue.$log.debug("getEthCapUser ", value);
+        return value; 
+    }
+
+    async getisStoreOpen(){
+        const accounts = await web3.eth.getAccounts();
+        var value = await this.storeContract.methods.isStoreOpen().call({from: accounts[0]});
+        Vue.$log.debug("getisStoreOpen ", value);
         return value; 
     }
     async getAssetCurrMintingBatch(ids){
@@ -257,12 +288,6 @@ class ContractsServices {
         const accounts = await web3.eth.getAccounts()
         Vue.$log.debug(ids,amounts)
         let response = await this.storeContract.methods.buyBatchNft(ids, amounts).send({from: accounts[0]})
-        return response.status
-    }
-    async buyTokens(etherAmount){
-        const accounts = await web3.eth.getAccounts()
-        let amountsWei = web3.utils.toWei(etherAmount)
-        let response = await this.storeContract.methods.buyTokens().send({from: accounts[0],value: amountsWei})
         return response.status
     }
 

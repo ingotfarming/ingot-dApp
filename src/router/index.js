@@ -5,7 +5,7 @@ import VueRouter from 'vue-router'
 import MyAssets from '@/views/MyAssets.vue'
 import MyFarm from '@/views/MyFarm.vue'
 import Store from '@/views/Store.vue'
-//import PreSale from '@/views/PreSale.vue'
+import PrivateSale from '@/views/PrivateSale.vue'
 
 
 Vue.use(VueRouter)
@@ -27,6 +27,10 @@ const routes = [
   {
     path: '/Store',
     component: Store
+  },
+  {
+    path: '/PrivateSale',
+    component: PrivateSale
   }
 ]
 /*

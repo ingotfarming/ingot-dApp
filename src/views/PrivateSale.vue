@@ -6,13 +6,13 @@
     <b-container class="my-5">
       <b-card no-body class="container-userinfo card-swap mx-auto border-0" >
         <b-card-header class="border-0">
-          <div class="sc-jSFjdj sc-gKAaRy kJmatq eqGhLO"><div class="sc-jSFjdj sc-gKAaRy kJmatq iIdAKa"><h2 color="body" scale="lg" class="sc-gtsrHT sc-bCwfaz krsPTE KsMbG">Buy Token</h2><div color="textSubtle" class="sc-gtsrHT grfoLI">Buy Token from ETH</div></div><div height="64" class="sc-iwajpm icJUJX"><img :src='require("@/assets/logoIngot.svg")' alt="INGOT" class="sc-cxNHIi fHUQtx" height="64"></div></div>
+          <div class="sc-jSFjdj sc-gKAaRy kJmatq eqGhLO"><div class="sc-jSFjdj sc-gKAaRy kJmatq iIdAKa"><h2 color="body" scale="lg" class="sc-gtsrHT sc-bCwfaz krsPTE KsMbG">Buy Token</h2><div color="textSubtle" class="sc-gtsrHT grfoLI">Buy Token from BNB</div></div><div height="64" class="sc-iwajpm icJUJX"><img :src='require("@/assets/logoIngot.svg")' alt="INGOT" class="sc-cxNHIi fHUQtx" height="64"></div></div>
         </b-card-header>
         <b-card-body >
           
       
           <b-form-group label-for="EthInput" class="text-center " label-size="lg">
-              <h5 class="grfoLI">PreSale <span v-if="saleIsOpen">Open</span><span v-else>Closed</span></h5>
+              <h5 class="grfoLI">Private Sale <span v-if="saleIsOpen">Open</span><span v-else>Closed</span></h5>
           </b-form-group>
 
 
@@ -29,8 +29,8 @@
             <!-- input class="sc-ksXhwv jSLqHT token-amount-input" inputmode="decimal" title="Token Amount" autocomplete="off" autocorrect="off" type="text" pattern="^[0-9]*[.,]?[0-9]*$" placeholder="0.0" minlength="1" maxlength="79" spellcheck="false" value="1" -->
             <button class="sc-bGqQkm ebCXba open-currency-select-button">
                <span class="sc-fXvjs endHJt">
-                  <img class="sc-bUrJUP fvDLME" width=24px alt="ETH" src="https://exchange.pancakeswap.finance/images/coins/0x2170ed0880ac9a755fd29b2688956bd959f933f8.png" style="margin-right: 8px;">
-                  <div id="pair" color="text" class="sc-gsTCUz hJWxft">ETH</div>
+                   <svg viewBox="0 0 16 16" width="24px" color="text" xmlns="http://www.w3.org/2000/svg" class="sc-bdvvaa iQxzfF" style="margin-right: 8px;"><circle cx="8" cy="8" r="8" fill="#F0B90B"></circle><path d="M5.01656 8.00006L3.79256 9.23256L2.56006 8.00006L3.79256 6.76756L5.01656 8.00006ZM8.00006 5.01656L10.1081 7.12456L11.3406 5.89206L9.23256 3.79256L8.00006 2.56006L6.76756 3.79256L4.66806 5.89206L5.90056 7.12456L8.00006 5.01656ZM12.2076 6.76756L10.9836 8.00006L12.2161 9.23256L13.4401 8.00006L12.2076 6.76756ZM8.00006 10.9836L5.89206 8.87556L4.66806 10.1081L6.77606 12.2161L8.00006 13.4401L9.23256 12.2076L11.3406 10.0996L10.1081 8.87556L8.00006 10.9836ZM8.00006 9.23256L9.23256 8.00006L8.00006 6.76756L6.76756 8.00006L8.00006 9.23256Z" fill="#FFFDFA"></path></svg>
+                  <div id="pair" color="text" class="sc-gsTCUz hJWxft">BNB</div>
                </span>
             </button>
          </div>
@@ -72,7 +72,7 @@
          <div class="sc-jGVbCA sc-fXoxut sc-Fyfyc cBDHvY fnVNkv fTMjUf">
             <div font-size="14px" color="text" class="sc-gsTCUz iZoLXo">Price: </div>
             <div font-size="14px" color="text" class="sc-gsTCUz iZoLXo" style="justify-content: center; align-items: center; display: flex;">
-               {{conversion}} INGOT per 1 ETH
+               {{conversion}} INGOT per 1 BNB
             </div>
          </div>
       </div>
@@ -80,9 +80,29 @@
     <div class="sc-irlOZD fvZHbs">
       <div class="sc-dWdcrH Armuo">
          <div class="sc-jGVbCA sc-fXoxut sc-Fyfyc cBDHvY fnVNkv fTMjUf">
-            <div font-size="14px" color="text" class="sc-gsTCUz iZoLXo">ETH Aviable: </div>
+            <div font-size="14px" color="text" class="sc-gsTCUz iZoLXo">BNB Aviable: </div>
             <div font-size="14px" color="text" class="sc-gsTCUz iZoLXo" style="justify-content: center; align-items: center; display: flex;">
-               {{fromWei(weiAviable)}} ETH
+               {{fromWei(weiAviable)}} BNB
+            </div>
+         </div>
+      </div>
+   </div>
+    <div class="sc-irlOZD fvZHbs">
+      <div class="sc-dWdcrH Armuo">
+         <div class="sc-jGVbCA sc-fXoxut sc-Fyfyc cBDHvY fnVNkv fTMjUf">
+            <div font-size="14px" color="text" class="sc-gsTCUz iZoLXo">User MAX BNB Aviable: </div>
+            <div font-size="14px" color="text" class="sc-gsTCUz iZoLXo" style="justify-content: center; align-items: center; display: flex;">
+               {{fromWei(weiAviableUser)}} BNB
+            </div>
+         </div>
+      </div>
+   </div>
+    <div class="sc-irlOZD fvZHbs">
+      <div class="sc-dWdcrH Armuo">
+         <div class="sc-jGVbCA sc-fXoxut sc-Fyfyc cBDHvY fnVNkv fTMjUf">
+            <div font-size="14px" color="text" class="sc-gsTCUz iZoLXo">User min BNB Aviable: </div>
+            <div font-size="14px" color="text" class="sc-gsTCUz iZoLXo" style="justify-content: center; align-items: center; display: flex;">
+               {{fromWei(weiMinUser)}} BNB
             </div>
          </div>
       </div>
@@ -105,7 +125,7 @@ import UserInfo from '@/components/UserInfo.vue'
 import EventBus from '@/main.js'
 
 export default {
-  name: 'Store',
+  name: 'PrivateSale',
   components: {
       UserInfo
   },
@@ -114,22 +134,28 @@ export default {
   },
   data: function() {
     return {
-        lead: "Here you can buy the Ingot Token at Pre Sale stage",
-        header:"Pre Sale",
+        lead: "Here you can buy the Ingot Token at Private Sale stage",
+        header:"Private Sale",
         ETHforBuy : 0,
         tokens : 0,
         conversion: 0,
         weiAviable: new BN(0),
         saleIsOpen : false,
-        buttonBuyDisabled: true
+        buttonBuyDisabled: true,
+        EthCapUser: new BN(0),
+        weiAviableUser: new BN(0),
+        weiMinUser: new BN(0)
     }
   },
   computed:{},
   created: async function(){
     await this.$contractServicePromise;
-    this.saleIsOpen = await this.$contractService.getisPresale();
+    this.saleIsOpen = await this.$contractService.getisPrivateSale();
     this.conversion = await this.$contractService.getFactorWeiToken();
     this.weiAviable = (new BN(await this.$contractService.getEthCap())).sub( new BN(await this.$contractService.getweiRaised()));
+    this.EthCapUser = await this.$contractService.getEthCapUser();
+    this.weiAviableUser = (new BN(await this.$contractService.getEthCapUser())).sub( new BN(await this.$contractService.getEthCapUserCurrent()));
+    this.weiMinUser = new BN(await this.$contractService.getMinEthUser()); 
   },
   methods: {
   buyTokens: async function(amounts){
@@ -155,7 +181,7 @@ export default {
         var weiAmount = new BN(web3.utils.toWei(String(amounts)));
         this.tokens = web3.utils.fromWei(weiAmount.mul(new BN(this.conversion)));
         this.$log.debug(amounts, this.tokens)
-        if(weiAmount.lte(this.weiAviable) && weiAmount.gt(new BN(0)) && this.saleIsOpen){
+        if(weiAmount.lte(this.weiAviable) && weiAmount.gte(this.weiMinUser) && this.saleIsOpen && weiAmount.lte(this.weiAviableUser) ){
             this.$log.debug("amounts <=aviable");
             this.buttonBuyDisabled = false;
         }else{
