@@ -1,0 +1,15 @@
+{
+    "name": "Iridium",
+    "description": "Iridium",
+    "image": "https://app.ingotfarming.finance/images/10.png",
+    "attributes": [
+        {
+            "trait_type": "Value",
+            "value": "215"
+        },
+        {
+            "trait_type": "Max Mintable",
+            "value": "547"
+        }
+    ]
+}

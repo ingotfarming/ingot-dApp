@@ -1,0 +1,15 @@
+{
+    "name": "Aluminium",
+    "description": "Aluminium",
+    "image": "https://app.ingotfarming.finance/images/1.png",
+    "attributes": [
+        {
+            "trait_type": "Value",
+            "value": "14"
+        },
+        {
+            "trait_type": "Max Mintable",
+            "value": "5425"
+        }
+    ]
+}

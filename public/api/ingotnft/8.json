@@ -1,0 +1,15 @@
+{
+    "name": "Gold",
+    "description": "Gold",
+    "image": "https://app.ingotfarming.finance/images/8.png",
+    "attributes": [
+        {
+            "trait_type": "Value",
+            "value": "118"
+        },
+        {
+            "trait_type": "Max Mintable",
+            "value": "910"
+        }
+    ]
+}

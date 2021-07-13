@@ -1,0 +1,15 @@
+{
+    "name": "Palladium",
+    "description": "Palladium",
+    "image": "https://app.ingotfarming.finance/images/9.png",
+    "attributes": [
+        {
+            "trait_type": "Value",
+            "value": "160"
+        },
+        {
+            "trait_type": "Max Mintable",
+            "value": "706"
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "name": "Rhodium",
+    "description": "Rhodium",
+    "image": "https://app.ingotfarming.finance/images/11.png",
+    "attributes": [
+        {
+            "trait_type": "Value",
+            "value": "290"
+        },
+        {
+            "trait_type": "Max Mintable",
+            "value": "424"
+        }
+    ]
+}

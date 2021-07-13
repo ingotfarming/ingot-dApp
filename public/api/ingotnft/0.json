@@ -1,0 +1,15 @@
+{
+    "name": "Lead",
+    "description": "Lead",
+    "image": "https://app.ingotfarming.finance/images/0.png",
+    "attributes": [
+        {
+            "trait_type": "Value",
+            "value": "10"
+        },
+        {
+            "trait_type": "Max Mintable",
+            "value": "7000"
+        }
+    ]
+}

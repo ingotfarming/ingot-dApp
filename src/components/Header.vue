@@ -15,8 +15,12 @@
         <b-nav-item to="/Farming">Farming</b-nav-item>
         <b-nav-item to="/Store">Store</b-nav-item>
         <!--b-nav-item :href="linkPreSale" target="_blank" rel="noopener noreferrer" >PreSale</b-nav-item-->
-        <b-nav-item to="/PrivateSale">Private Sale</b-nav-item>
+        <!--b-nav-item to="/PrivateSale">Private Sale</b-nav-item-->
         <b-nav-item href="https://ingotfarming.gitbook.io" target="_blank" rel="noopener noreferrer" >Guide</b-nav-item>
+        <b-nav-item-dropdown id="my-nav-dropdown" text="Trade">
+          <b-dropdown-item href="https://www.treasureland.market/" target="_blank" rel="noopener noreferrer" >Treasureland</b-dropdown-item >
+          <b-dropdown-item href="https://app.bounce.finance/" target="_blank" rel="noopener noreferrer" >Bounce</b-dropdown-item >
+        </b-nav-item-dropdown>
       </b-navbar-nav>
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">

@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body class= "h-100 box-shadow border-0"  v-bind:img-src='require("@/assets/NFT/"+this.id+".png")' img-alt="Image" img-top>
+  <b-card no-body class= "h-100 box-shadow border-0"  v-bind:img-src='require("/public/images/"+this.id+".png")' img-alt="Image" img-top>
     <b-card-body>
       <b-card-title>{{name}}</b-card-title>
       
