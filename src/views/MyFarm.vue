@@ -3,7 +3,7 @@
     <b-jumbotron :header="header" :lead="lead" :fluid="true" class="py-4 jumbotron-style">
         <b-nav align="center " class="mt-4 nav-bar mx-auto" >
     <b-nav-item  class="nav-item nav-item-link" active-class="nav-item-active" link-classes="nav-item-link" to="/Farming">Ingot LP</b-nav-item>
-    <b-nav-item disabled class="nav-item nav-item-link-disabled " active-class="nav-item-active" link-classes="nav-item-link">{{nameExchange}} LP</b-nav-item>
+    <b-nav-item  class="nav-item nav-item-link" active-class="nav-item-active" link-classes="nav-item-link" to="/FarmingLP">{{nameExchange}} LP</b-nav-item>
   </b-nav>
       </b-jumbotron>
       <UserInfo :balanceWidget="true" :poolPowerWidget="true" :rewardWidget="true"/>

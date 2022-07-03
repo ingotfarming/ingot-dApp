@@ -1,4 +1,4 @@
-import { IngotToken, IngotNFT, IngotFarm, Store, PrivateSale, NFT } from '../assets'
+import { IngotToken, IngotNFT, IngotFarm, Store, PrivateSale,MasterChef, NFT, ERC20 } from '../assets'
 import Vue from 'vue'
 
 //import web3 from './web3Providers'
@@ -18,6 +18,11 @@ const INGOT_FARM_ADDRESS= process.env.VUE_APP_INGOT_FARM_ADDRESS;
 const STORE_ADDRESS= process.env.VUE_APP_STORE_ADDRESS;
 const PRIVATE_SALE_ADDRESS= process.env.VUE_APP_PRIVATE_SALE_ADDRESS;
 
+const INGOT_FARM_LP_ADDRESS= process.env.VUE_APP_INGOT_FARM_LP_ADDRESS;
+const INGOT_LP_ADDRESS= process.env.VUE_APP_INGOT_LP_ADDRESS
+
+
+
 const CONTRACT_IS_DEPLOYED = (process.env.VUE_APP_CONTRACT_DEPLOYED === 'true');
 
 const NUM_ASSET_TYPES = NFT.length;
@@ -36,6 +41,7 @@ class ContractsServices {
         this.IngotFarmContract = null;
         this.storeContract = null;
         this.privateSaleContract = null;
+        this.IngotFarmLPContract = null;
       }
 
     _initContracts(){
@@ -46,6 +52,9 @@ class ContractsServices {
         this.IngotFarmContract = new web3.eth.Contract(IngotFarm.abi, INGOT_FARM_ADDRESS);
         this.storeContract = new web3.eth.Contract(Store.abi, STORE_ADDRESS);
         this.privateSaleContract = new web3.eth.Contract(PrivateSale.abi, PRIVATE_SALE_ADDRESS);
+        this.IngotFarmLPContract = new web3.eth.Contract(MasterChef.abi, INGOT_FARM_LP_ADDRESS);
+        this.IngotLP = new web3.eth.Contract(ERC20.abi, INGOT_LP_ADDRESS);
+        
 
       }
     async getPrice(id){
@@ -283,14 +292,59 @@ class ContractsServices {
         Vue.$log.debug("approveTransferToStore ", amountWei.toString())
         let response = await this.IngotTokenContract.methods.approve(STORE_ADDRESS,amountWei).send({from: accounts[0]});
         return response.status;
-    } 
+    }
+    
     async buyBatchFromStore(ids, amounts){  
         const accounts = await web3.eth.getAccounts()
-        Vue.$log.debug(ids,amounts)
+        Vue.$log.debug("buyBatchFromStore", ids,amounts)
         let response = await this.storeContract.methods.buyBatchNft(ids, amounts).send({from: accounts[0]})
+        Vue.$log.debug("buyBatchFromStore", response)
         return response.status
     }
 
+    // MasterChef LP
+
+    async approveMaxToFarmLP(){  
+        const accounts = await web3.eth.getAccounts()
+        let amountWei = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+        Vue.$log.debug("approveMaxToFarmLP ", amountWei)
+        let response = await this.IngotLP.methods.approve(INGOT_FARM_LP_ADDRESS,amountWei).send({from: accounts[0]});
+        return response.status;
+    }
+
+    async depositToFarmLP(pid, amount){  
+        const accounts = await web3.eth.getAccounts()
+        let amountWei = web3.utils.toWei(amount);
+        Vue.$log.debug("depositToFarmLP ", amountWei.toString())
+        let response = await this.IngotFarmLPContract.methods.deposit(pid, amountWei).send({from: accounts[0]});
+        return response.status;
+    }
+    async withdrawToFarmLP(pid, amount){  
+        const accounts = await web3.eth.getAccounts()
+        let amountWei = web3.utils.toWei(amount);
+        Vue.$log.debug("withdrawToFarmLP ", amountWei.toString())
+        let response = await this.IngotFarmLPContract.methods.withdraw(pid, amountWei).send({from: accounts[0]});
+        return response.status;
+    }
+
+    async pendingToFarmLP(pid){  
+        const accounts = await web3.eth.getAccounts()
+        Vue.$log.debug("pendingToFarmLP", pid)
+        let response = await this.IngotFarmLPContract.methods.pendingCake(pid, accounts[0]).call({from: accounts[0]});
+        Vue.$log.debug("pendingToFarmLP", response);
+        var balanceWei = web3.utils.fromWei(response)
+        return balanceWei;
+    }
+
+    async userInfoToFarmLP(pid){  
+        const accounts = await web3.eth.getAccounts()
+        Vue.$log.debug("userInfoToFarmLP ")
+        let response = await this.IngotFarmLPContract.methods.userInfo(pid, accounts[0]).call({from: accounts[0]});
+        Vue.$log.debug("userInfoToFarmLP", response);
+        return web3.utils.fromWei(response['amount']);
+    }
+
+    
     createContract = async function () {
         const web3 = await Web3()        
         if (!web3) {

@@ -18,8 +18,7 @@
         <!--b-nav-item to="/PrivateSale">Private Sale</b-nav-item-->
         <b-nav-item href="https://ingotfarming.gitbook.io" target="_blank" rel="noopener noreferrer" >Guide</b-nav-item>
         <b-nav-item-dropdown id="my-nav-dropdown" text="Trade">
-          <b-dropdown-item href="https://www.treasureland.market/" target="_blank" rel="noopener noreferrer" >Treasureland</b-dropdown-item >
-          <b-dropdown-item href="https://app.bounce.finance/" target="_blank" rel="noopener noreferrer" >Bounce</b-dropdown-item >
+          <b-dropdown-item href="https://treasureland.market/assets?sort=2&contract=0xA087B2938DD045d561E0b9A307fCC628bf8038C9" target="_blank" rel="noopener noreferrer" >Treasureland</b-dropdown-item >
         </b-nav-item-dropdown>
       </b-navbar-nav>
       <!-- Right aligned nav items -->

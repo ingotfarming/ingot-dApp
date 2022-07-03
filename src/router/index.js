@@ -5,6 +5,8 @@ import VueRouter from 'vue-router'
 import MyAssets from '@/views/MyAssets.vue'
 import MyFarm from '@/views/MyFarm.vue'
 import Store from '@/views/Store.vue'
+import MyFarmLP from '@/views/MyFarmLP.vue'
+
 //import PrivateSale from '@/views/PrivateSale.vue'
 
 
@@ -23,6 +25,10 @@ const routes = [
   {
     path: '/Farming',
     component: MyFarm
+  },
+  {
+    path: '/FarmingLP',
+    component: MyFarmLP
   },
   {
     path: '/Store',
